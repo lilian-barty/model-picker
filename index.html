@@ -1,0 +1,1075 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Model Picker · Quel modèle Claude pour ce prompt ?</title>
+<meta name="description" content="Décrivez votre tâche. L'outil analyse votre prompt, recommande le bon modèle Claude et estime le coût en direct. Sans compte, rien n'est envoyé.">
+<meta name="author" content="Lilian Barty-Christophe">
+<meta property="og:title" content="Model Picker — Quel modèle Claude pour ce prompt ?">
+<meta property="og:description" content="Analyse votre tâche, recommande le modèle et l'effort, estime le coût. Gratuit, sans compte, rien n'est envoyé.">
+<meta property="og:type" content="website">
+<meta property="og:url" content="https://www.lilian-barty.fr/outils/model-picker/">
+<meta property="og:image" content="https://www.lilian-barty.fr/Assets/Images/og-accueil-4.jpg">
+<meta property="og:locale" content="fr_FR">
+<meta name="twitter:card" content="summary_large_image">
+<meta name="twitter:title" content="Model Picker — Lilian Barty-Christophe">
+<meta name="twitter:description" content="Quel modèle Claude pour ce prompt ? L'outil analyse votre tâche et estime le coût en direct.">
+<meta name="twitter:image" content="https://www.lilian-barty.fr/Assets/Images/og-accueil-4.jpg">
+<link rel="icon" type="image/svg+xml" href="/favicon.svg">
+<meta name="theme-color" content="#4A1942"/>
+<link rel="apple-touch-icon" href="/apple-touch-icon.png">
+<link rel="canonical" href="https://www.lilian-barty.fr/outils/model-picker/">
+<style>
+  :root{
+    --bg:#100c10;
+    --panel:#1d1520;
+    --panel2:#261c2a;
+    --border:#3d2b3a;
+    --border2:#523848;
+    --txt:#f0ecf0;
+    --muted:#c8afc4;
+    --soft:#A38CA1;
+    --hero:#d9a8d6;
+    --hero-mid:#a864a4;
+    --haiku:#4ade80;
+    --sonnet:#c084c7;
+    --opus:#d9a8d6;
+    --fable:#f2c46b;
+    --bas:#60a5fa;
+    --moyen:#94a3b8;
+    --haut:#e8820c;
+    --xhaut:#f4511e;
+    --max:#fe2400;
+    --orange:#e8820c;
+    --orange-dim:#c67b00;
+    --orange-glow:rgba(232,130,12,.12);
+    --green:#4ade80;
+    --green-dim:#22a558;
+    --green-glow:rgba(74,222,128,.10);
+    --radius:14px;
+  }
+
+  *,*::before,*::after{box-sizing:border-box;margin:0;padding:0}
+
+  body{
+    font-family:'Segoe UI',system-ui,-apple-system,sans-serif;
+    background:var(--bg);
+    background-image:radial-gradient(ellipse 900px 400px at 50% -60px,#2e1535 0%,transparent 70%);
+    color:var(--txt);min-height:100vh;padding:36px 16px 72px;line-height:1.55;
+  }
+
+  .wrap{max-width:760px;margin:0 auto}
+
+  /* ── HEADER ── */
+  header{
+    display:flex;align-items:flex-start;justify-content:space-between;
+    flex-wrap:wrap;gap:12px;margin-bottom:28px;
+  }
+  .brand h1{
+    font-size:21px;font-weight:800;color:var(--txt);letter-spacing:-.02em;
+  }
+  .brand h1 span{color:var(--hero)}
+  .brand p{font-size:13px;color:var(--muted);margin-top:5px;max-width:440px}
+  .brand .by{
+    display:block;font-size:11px;color:var(--soft);margin-top:8px;
+  }
+  .brand .by a{color:var(--green-dim);text-decoration:none;font-weight:700}
+  .brand .by a:hover{color:var(--green)}
+  .tag{
+    font-size:10px;font-weight:700;letter-spacing:.14em;text-transform:uppercase;
+    border:1px solid var(--orange-dim);color:var(--orange);
+    padding:5px 12px;border-radius:20px;white-space:nowrap;
+    background:var(--orange-glow);
+  }
+
+  /* ── MODE SWITCH ── */
+  .modes{display:flex;gap:6px;margin-bottom:14px}
+  .mode{
+    flex:1;font-size:12px;font-weight:700;text-align:center;cursor:pointer;
+    padding:9px 10px;border-radius:10px;border:1px solid var(--border);
+    background:var(--panel);color:var(--soft);transition:.15s;letter-spacing:.02em;
+  }
+  .mode:hover{border-color:var(--border2);color:var(--muted)}
+  .mode.on{border-color:var(--orange-dim);color:var(--orange);background:var(--orange-glow)}
+
+  /* ── CARD ── */
+  .card{background:var(--panel);border:1px solid var(--border);border-radius:var(--radius);padding:20px}
+  .lbl{font-size:10px;font-weight:700;color:var(--green-dim);text-transform:uppercase;letter-spacing:.14em;margin-bottom:10px;display:flex;justify-content:space-between;align-items:center}
+  .lbl .hint{color:var(--soft);font-weight:600;letter-spacing:.02em;text-transform:none;font-size:11px}
+
+  /* ── TEXTAREA ── */
+  textarea{
+    width:100%;min-height:122px;resize:vertical;
+    background:var(--panel2);border:1px solid var(--border2);border-radius:10px;
+    color:var(--txt);padding:14px 16px;font-size:15px;font-family:inherit;
+    line-height:1.6;transition:border-color .15s;
+  }
+  textarea.batch{min-height:170px;font-family:ui-monospace,'Cascadia Code',monospace;font-size:13.5px}
+  textarea:focus{outline:none;border-color:var(--orange-dim);box-shadow:0 0 0 3px var(--orange-glow)}
+  textarea::placeholder{color:var(--soft)}
+
+  /* ── EXEMPLES ── */
+  .examples{display:flex;flex-wrap:wrap;gap:7px;margin-top:12px}
+  .ex{
+    font-size:12px;color:var(--muted);background:var(--panel2);
+    border:1px solid var(--border);border-radius:20px;
+    padding:5px 12px;cursor:pointer;transition:.15s;
+  }
+  .ex:hover{border-color:var(--green-dim);color:var(--green);background:var(--green-glow)}
+
+  /* ── RÉSULTAT ── */
+  .result{margin-top:16px;display:grid;grid-template-columns:1fr 1fr;gap:14px}
+
+  .pill{
+    border-radius:var(--radius);padding:18px;
+    border:1px solid var(--border);background:var(--panel);
+    position:relative;overflow:hidden;
+  }
+  .pill-glow{position:absolute;inset:0;opacity:.13;pointer-events:none}
+  .pill .ptitle{
+    font-size:10px;color:var(--soft);text-transform:uppercase;
+    letter-spacing:.14em;font-weight:700;margin-bottom:10px;position:relative;
+  }
+  .badge{
+    display:inline-flex;align-items:center;gap:9px;
+    font-size:26px;font-weight:800;letter-spacing:-.02em;
+    color:var(--txt);position:relative;
+  }
+  .dot{width:13px;height:13px;border-radius:50%;display:inline-block;flex-shrink:0}
+  .pill .sub{color:var(--muted);font-size:12.5px;margin-top:9px;position:relative}
+  .pill .api{display:block;margin-top:4px;font-size:11px;color:var(--soft)}
+  .pill .api b{color:var(--muted);font-weight:600}
+
+  /* ── RATIONALE ── */
+  .why{
+    margin-top:14px;background:var(--panel);
+    border:1px solid var(--border);border-radius:var(--radius);padding:18px;
+  }
+  .why .rationale{font-size:14px;color:var(--txt);margin-bottom:14px;line-height:1.65}
+  .why .rationale b{color:var(--hero)}
+  .chips{display:flex;flex-wrap:wrap;gap:7px}
+  .chip{
+    font-size:12px;padding:5px 11px;border-radius:20px;
+    border:1px solid var(--border);background:var(--panel2);color:var(--muted);
+  }
+  .chip b{color:var(--txt);font-weight:600}
+  .chip.c-opus  {border-color:rgba(217,168,214,.35);background:rgba(217,168,214,.08);color:var(--hero)}
+  .chip.c-haiku {border-color:rgba(74,222,128,.35);background:rgba(74,222,128,.07);color:#86efac}
+  .chip.c-dim   {border-color:rgba(192,132,199,.4);background:rgba(192,132,199,.08);color:var(--sonnet)}
+  .chip.c-crit  {border-color:rgba(254,36,0,.35);background:rgba(254,36,0,.07);color:var(--max)}
+  .chip.c-medium{border-color:rgba(232,130,12,.4);background:var(--orange-glow);color:var(--orange)}
+  .chip.c-light {border-color:rgba(148,163,184,.3);background:rgba(148,163,184,.06);color:var(--moyen)}
+  .chip.c-doc   {border-color:rgba(192,132,199,.4);background:rgba(192,132,199,.08);color:var(--sonnet)}
+  .chip.c-neg   {border-color:rgba(131,105,128,.4);background:rgba(131,105,128,.10);color:var(--soft);text-decoration:line-through}
+
+  .note{
+    margin-top:12px;font-size:12.5px;line-height:1.55;color:var(--muted);
+    background:var(--panel2);border:1px solid var(--border);
+    border-left:3px solid var(--sonnet);border-radius:8px;padding:10px 13px;
+  }
+  .note b{color:var(--txt);font-weight:600}
+  .note.n-effort{border-left-color:var(--haut)}
+  .note.n-fable{border-left-color:var(--fable)}
+
+  /* ── NATURE (cadré ↔ jugement) ── */
+  .nature{
+    margin-top:14px;background:var(--panel);border:1px solid var(--border);
+    border-radius:var(--radius);padding:18px;
+  }
+  .nature-head{display:flex;justify-content:space-between;align-items:baseline;margin-bottom:16px;gap:12px}
+  .nature-head .t{font-size:10px;font-weight:700;color:var(--green-dim);text-transform:uppercase;letter-spacing:.14em}
+  .nature-head .verdict{font-size:15px;font-weight:800;letter-spacing:-.01em;white-space:nowrap}
+  .spectrum{position:relative;height:8px;border-radius:6px;margin:4px 0 9px;
+    background:linear-gradient(90deg,var(--green) 0%,#8b7f92 50%,var(--hero) 100%);opacity:.9}
+  .spectrum .mark{
+    position:absolute;top:50%;width:17px;height:17px;border-radius:50%;
+    background:var(--txt);border:3px solid var(--bg);transform:translate(-50%,-50%);
+    box-shadow:0 0 0 2px currentColor;transition:left .55s cubic-bezier(.34,1.4,.64,1);
+  }
+  .spectrum-lbls{display:flex;justify-content:space-between;font-size:10.5px;font-weight:700;letter-spacing:.02em}
+  .spectrum-lbls .l{color:#86efac}
+  .spectrum-lbls .r{color:var(--hero)}
+  .nature-rule{margin-top:14px;font-size:13.5px;line-height:1.62;color:var(--txt)}
+  .nature-rule b{color:var(--hero)}
+  .nature-src{margin-top:11px;font-size:10.5px;color:var(--soft);line-height:1.5;
+    border-top:1px solid var(--border);padding-top:10px}
+
+  /* ── COÛT ── */
+  .cost{
+    margin-top:14px;background:var(--panel);border:1px solid var(--border);
+    border-radius:var(--radius);padding:18px;
+  }
+  .cost-head{display:flex;justify-content:space-between;align-items:baseline;margin-bottom:6px}
+  .cost-head .t{font-size:10px;font-weight:700;color:var(--green-dim);text-transform:uppercase;letter-spacing:.14em}
+  .cost-head .sz{font-size:11px;color:var(--soft)}
+  .cost-rows{display:grid;gap:8px;margin-top:12px}
+  .cost-row{display:flex;align-items:center;gap:10px}
+  .cost-name{width:66px;flex-shrink:0;font-size:12.5px;font-weight:600}
+  .cost-bar{flex:1;height:20px;border-radius:6px;background:var(--panel2);border:1px solid var(--border);overflow:hidden;position:relative}
+  .cost-bar i{display:block;height:100%;width:0;border-radius:6px;transition:width .6s cubic-bezier(.34,1.4,.64,1)}
+  .cost-val{width:112px;flex-shrink:0;text-align:right;font-size:12px;color:var(--muted);font-variant-numeric:tabular-nums}
+  .cost-val b{color:var(--txt)}
+  .cost-row.reco .cost-name{color:var(--txt)}
+  .cost-row.reco .cost-bar{border-color:var(--border2)}
+  .cost-row.dim{opacity:.5}
+  .cost-foot{margin-top:12px;font-size:12px;line-height:1.55;color:var(--muted)}
+  .cost-foot b{color:var(--green)}
+  .cost-foot .warn{color:var(--orange)}
+  .cost-disc{margin-top:9px;font-size:10.5px;color:var(--soft);line-height:1.5}
+
+  .score{display:block;font-size:11px;color:var(--soft);margin-top:12px;
+    font-variant-numeric:tabular-nums;letter-spacing:.02em}
+
+  /* ── BATCH TABLE ── */
+  .batch-out{margin-top:16px}
+  .batch-summary{
+    background:linear-gradient(135deg,#1d1520 0%,#1a2018 100%);
+    border:1px solid var(--green-dim);border-radius:var(--radius);
+    padding:15px 18px;margin-bottom:14px;font-size:13px;line-height:1.6;color:var(--txt);
+  }
+  .batch-summary b{color:var(--green)}
+  .batch-summary .warn{color:var(--orange)}
+  .btable{width:100%;border-collapse:collapse;font-size:13px;background:var(--panel);
+    border:1px solid var(--border);border-radius:var(--radius);overflow:hidden}
+  .btable th{font-size:9.5px;text-transform:uppercase;letter-spacing:.1em;color:var(--soft);
+    text-align:left;padding:10px 12px;border-bottom:1px solid var(--border);font-weight:700}
+  .btable td{padding:11px 12px;border-bottom:1px solid var(--border);vertical-align:top}
+  .btable tr:last-child td{border-bottom:none}
+  .btable .b-prompt{color:var(--muted);max-width:340px}
+  .btable .b-model{font-weight:700;white-space:nowrap}
+  .btable .b-eff{font-size:11px;color:var(--soft);white-space:nowrap}
+  .btable .b-cost{text-align:right;white-space:nowrap;font-variant-numeric:tabular-nums;color:var(--muted)}
+  .m-Haiku{color:var(--haiku)} .m-Sonnet{color:var(--sonnet)} .m-Opus{color:var(--opus)} .m-Fable{color:var(--fable)}
+
+  .empty{color:var(--soft);font-size:14px;text-align:center;padding:24px 0}
+
+  /* ── RÉFÉRENCE ── */
+  details{
+    margin-top:20px;background:var(--panel);
+    border:1px solid var(--border);border-radius:var(--radius);padding:2px 18px;
+  }
+  summary{cursor:pointer;padding:14px 0;font-weight:700;font-size:13px;color:var(--muted);list-style:none}
+  summary::-webkit-details-marker{display:none}
+  summary::before{content:'▸ ';color:var(--orange-dim)}
+  details[open] summary{color:var(--orange)}
+  details[open] summary::before{content:'▾ '}
+  table.ref{width:100%;border-collapse:collapse;font-size:13px;margin:4px 0 16px}
+  table.ref th,table.ref td{text-align:left;padding:9px 10px;border-bottom:1px solid var(--border)}
+  table.ref th{color:var(--soft);font-weight:700;text-transform:uppercase;letter-spacing:.06em;font-size:10px}
+  table.ref td:first-child{color:var(--txt);font-weight:500}
+  table.ref td:last-child{font-weight:600;font-size:12px}
+
+  /* ── CONVERSION ── */
+  .cta{
+    display:none;margin-top:14px;
+    background:linear-gradient(135deg,#1d1520 0%,#1a2018 100%);
+    border:1px solid var(--green-dim);
+    padding:18px 20px;position:relative;overflow:hidden;
+  }
+  .cta::before{content:'';position:absolute;inset:0;
+    background:radial-gradient(400px 200px at 100% 100%,rgba(74,222,128,.07),transparent);pointer-events:none}
+  .cta.show{display:block}
+  .cta-txt{font-size:13.5px;color:var(--txt);line-height:1.6;margin-bottom:12px}
+  .cta-txt b{color:var(--green)}
+  .cta-links{display:flex;flex-wrap:wrap;gap:8px}
+  .cta-btn{font-size:12px;font-weight:700;padding:7px 14px;text-decoration:none;transition:.15s}
+  .cta-btn.primary{background:var(--green-dim);color:#0a1a0a;border:1px solid var(--green-dim)}
+  .cta-btn.primary:hover{background:var(--green);border-color:var(--green)}
+  .cta-btn.secondary{background:transparent;color:var(--muted);border:1px solid var(--border2)}
+  .cta-btn.secondary:hover{border-color:var(--green-dim);color:var(--green)}
+
+  footer{text-align:center;margin-top:28px;color:var(--soft);font-size:12px;
+    padding-top:18px;border-top:1px solid var(--border)}
+  footer a{color:var(--green-dim);text-decoration:none;font-weight:600}
+  footer a:hover{color:var(--green)}
+
+  /* Cibles tactiles WCAG 2.5.5 : 44px minimum (rétabli après refonte v3) */
+  @media(hover:none){
+    footer a,.brand .by a{display:inline-block;min-height:44px;line-height:44px}
+    .cta-btn{min-height:44px;display:inline-flex;align-items:center}
+  }
+
+  @media(max-width:560px){
+    .result{grid-template-columns:1fr}
+    .brand h1{font-size:18px}
+    .cost-val{width:96px}
+    .btable .b-prompt{max-width:150px}
+  }
+
+  /* ════════ animations ambiantes ════════ */
+  body::before{
+    content:'';position:fixed;inset:-25%;z-index:-2;pointer-events:none;
+    background:
+      radial-gradient(38% 48% at 18% 22%,rgba(168,100,164,.20),transparent 70%),
+      radial-gradient(34% 44% at 82% 14%,rgba(232,130,12,.11),transparent 70%),
+      radial-gradient(46% 52% at 62% 84%,rgba(74,222,128,.09),transparent 70%);
+    filter:blur(34px);animation:auroraDrift 24s ease-in-out infinite alternate;
+  }
+  @keyframes auroraDrift{
+    0%{transform:translate3d(0,0,0) scale(1)}
+    50%{transform:translate3d(3%,-2.5%,0) scale(1.09)}
+    100%{transform:translate3d(-2.5%,3%,0) scale(1.05)}
+  }
+  @keyframes riseIn{from{opacity:0;transform:translateY(16px)}to{opacity:1;transform:translateY(0)}}
+  header{animation:riseIn .55s cubic-bezier(.22,1,.36,1) both}
+  .card{animation:riseIn .55s cubic-bezier(.22,1,.36,1) .08s both}
+  .tag{animation:tagPop .6s cubic-bezier(.34,1.5,.64,1) .25s both}
+  @keyframes tagPop{from{opacity:0;transform:scale(.7)}to{opacity:1;transform:scale(1)}}
+  textarea:focus{animation:taPulse 2.6s ease-in-out infinite}
+  @keyframes taPulse{0%,100%{box-shadow:0 0 0 3px var(--orange-glow)}50%{box-shadow:0 0 0 5px rgba(232,130,12,.20)}}
+  .pill-glow{animation:glowBreath 4.5s ease-in-out infinite}
+  @keyframes glowBreath{0%,100%{opacity:.10}50%{opacity:.22}}
+  .dot{position:relative}
+  .dot::after{content:'';position:absolute;inset:-5px;border-radius:50%;
+    border:2px solid currentColor;animation:dotPulse 2.2s ease-out infinite}
+  @keyframes dotPulse{0%{transform:scale(.75);opacity:.75}100%{transform:scale(2);opacity:0}}
+  @keyframes pillFlipIn{
+    0%{transform:perspective(900px) rotateY(-90deg) scale(.93);opacity:0}
+    55%{opacity:1}
+    100%{transform:perspective(900px) rotateY(0deg) scale(1);opacity:1}
+  }
+  .pill-flip{animation:pillFlipIn .38s cubic-bezier(.34,1.5,.64,1) both}
+  @keyframes chipIn{
+    0%{opacity:0;transform:translateY(8px) scale(.85)}
+    70%{transform:translateY(-2px) scale(1.04)}
+    100%{opacity:1;transform:translateY(0) scale(1)}
+  }
+  .chips .chip{opacity:0}
+  @keyframes exIn{from{opacity:0;transform:translateY(7px)}to{opacity:1;transform:translateY(0)}}
+  .ex{opacity:0;animation:exIn .42s cubic-bezier(.22,1,.36,1) both}
+  .ex:hover{transform:translateY(-2px)}
+  .empty .ghost{color:var(--muted)}
+  .caret{display:inline-block;width:2px;height:1.05em;background:var(--orange);
+    margin-left:2px;vertical-align:-2px;animation:blink 1s steps(1) infinite}
+  @keyframes blink{50%{opacity:0}}
+  .cta.show{animation:ctaUp .55s cubic-bezier(.34,1.3,.64,1) both}
+  @keyframes ctaUp{from{opacity:0;transform:translateY(18px)}to{opacity:1;transform:translateY(0)}}
+  @media(prefers-reduced-motion:reduce){
+    *,*::before,*::after{animation-duration:.001ms!important;animation-iteration-count:1!important;transition-duration:.001ms!important}
+  }
+  /*no-italic-inline*/em,i,cite{font-style:normal;}
+
+/* ---- Arrondi des boutons ----
+   Une seule regle pour tous les boutons du site. La valeur vit dans
+   --btn-radius : la changer ici change tout le site. Les liens de
+   texte a fleche en sont exclus, ils n'ont ni fond ni bordure. */
+:root{--btn-radius:6px;}
+.btn,.btn-red,.btn-red-hero,.btn-red-lg,.btn-ghost,.btn-ghost-hero,.btn-white,.btn-bio,.btn-cta,.btn-au,.btn-top,.btn-export,.btn-add-tool,.btn-add-obj,.btn-cfg-secondary,.cta-box a,.cta-btn,.cta,.offre-cta,.offre-cta-solid,.offre-cta-outline,.profile-cta,.mob-cta-bar a,.cf-submit,.w3-submit,.s-cta,.s-cta-final,.uc-cta,.uc-promo-cta,.art-footer-cta,.afc-btn,.blog-cta,.bcta-btn,.dt-cta,.hero-cta,.dl-btn,.rv-gate-btn,.stab,.rbtn,.obj-btn,#launch-btn,.tdah-field button,.bq-btn,.st-btn{border-radius:var(--btn-radius);}
+</style>
+<script type="application/ld+json">
+{"@context":"https://schema.org","@type":"WebApplication","name":"Model Picker","url":"https://www.lilian-barty.fr/outils/model-picker/","applicationCategory":"DeveloperApplication","operatingSystem":"Web","inLanguage":"fr-FR","offers":{"@type":"Offer","price":"0","priceCurrency":"EUR"},"author":{"@type":"Person","name":"Lilian Barty-Christophe","url":"https://www.lilian-barty.fr/"}}
+</script>
+</head>
+<body>
+<div class="wrap">
+
+  <header>
+    <div class="brand">
+      <h1>Quel modèle <span>Claude</span> pour ce prompt&nbsp;?</h1>
+      <p>Décrivez votre tâche. L'outil l'analyse (pas seulement ses mots-clés), recommande le modèle et l'effort, puis estime le coût. En direct, rien n'est envoyé.</p>
+      <div class="by">Construit par <a href="https://www.lilian-barty.fr/" target="_blank">Lilian Barty-Christophe</a>, consultant IA, automatisation et revenu</div>
+    </div>
+    <div class="tag">Model Picker</div>
+  </header>
+
+  <div class="modes">
+    <div class="mode on" data-mode="single" id="m-single">Un prompt</div>
+    <div class="mode" data-mode="batch" id="m-batch">Plusieurs (une tâche par ligne)</div>
+  </div>
+
+  <div class="card">
+    <div class="lbl"><span id="fieldlbl">Votre prompt</span><span class="hint" id="fieldhint">tapez comme vous parleriez à l'IA</span></div>
+    <textarea id="prompt" placeholder="Ex : Fais-moi un audit complet SEO, UX et UI de ce site et priorise les recommandations…"></textarea>
+    <div class="examples" id="examples"></div>
+  </div>
+
+  <div id="out"></div>
+
+  <div class="cta" id="cta">
+    <div class="cta-txt">
+      Vous utilisez l'IA tous les jours et vous voulez arrêter de payer trop cher, ou de sous-dimensionner vos tâches importantes ?<br>
+      <b>J'installe chez les indépendants et les équipes des systèmes IA qui font le bon arbitrage automatiquement.</b>
+    </div>
+    <div class="cta-links">
+      <a class="cta-btn primary" href="https://tidycal.com/lilianchristophe/45-minute-meeting" target="_blank">Parler à un expert</a>
+      <a class="cta-btn secondary" href="https://www.lilian-barty.fr/" target="_blank">Voir ce que je fais</a>
+    </div>
+  </div>
+
+  <details>
+    <summary>Voir la grille de référence complète</summary>
+    <table class="ref">
+      <tr><th>Type de tâche détecté</th><th>Recommandation</th></tr>
+      <tr><td>Reformuler, corriger, traduire, résumer, extraire, formater</td><td>Haiku, sans réglage d'effort</td></tr>
+      <tr><td>Rédiger (email, article, rapport), tâche standard bornée</td><td>Sonnet, effort Bas à Haut</td></tr>
+      <tr><td>Analyser, comparer, optimiser, plusieurs angles</td><td>Sonnet ou Opus, effort Haut</td></tr>
+      <tr><td>Concevoir, auditer, stratégie, juridique, sécurité, migration</td><td>Opus, effort Haut</td></tr>
+      <tr><td>Exhaustif, multi-dimensions, décision critique</td><td>Opus, effort Max</td></tr>
+      <tr><td>Agent autonome, workflow de bout en bout, longue haleine</td><td>Sonnet ou Opus, effort Très haut</td></tr>
+      <tr><td>Opus en effort Max ne suffit pas</td><td>Fable 5.1, en recours</td></tr>
+      <tr><td>Tâche répétitive / en volume</td><td>On descend d'un cran (coût)</td></tr>
+      <tr><td>Très gros document (+100 pages)</td><td>Sonnet ou Opus (pas Haiku)</td></tr>
+    </table>
+    <p style="font-size:11.5px;color:var(--soft);line-height:1.55;margin:0 0 14px">
+      L'outil ne compte pas juste des mots-clés : il repère les <b style="color:var(--muted)">négations</b>
+      («&nbsp;sans audit&nbsp;» ne compte pas), classe la tâche par <b style="color:var(--muted)">famille</b>
+      (mécanique / rédaction / analyse / conception), puis module selon la criticité, le volume et la longueur.
+      Il situe surtout la tâche sur l'axe <b style="color:var(--muted)">exécution cadrée ↔ jugement</b> :
+      le cadré (factuel, règles explicites, résultat vérifiable) se délègue à un modèle léger ;
+      le jugement (stratégie, pricing, angle éditorial, arbitrage, décision à conséquences) se garde sur le plus capable,
+      parce que c'est là qu'un modèle trop léger produit un travail médiocre sans le signaler.
+      L'effort suit les cinq réglages de Claude Code et de l'API : low, medium, high, xhigh et max.
+      Haiku 4.5 n'en a aucun, et Opus 5.5 démarre en medium.
+      <b style="color:var(--fable)">Fable 5.1</b> n'arrive jamais en tête. Anthropic conseille de commencer par Opus 5.5,
+      qui fait jeu égal avec Fable sur la plupart des tâches, plus vite et pour 2,5 fois moins cher.
+      Fable reste le recours si Opus 5.5 ne suffit pas, même en effort max, et pour un très long travail autonome.
+      Les quatre modèles lisent texte, images et PDF. Haiku plafonne à 100 pages par requête ;
+      les trois autres ont un contexte d'un million de tokens et montent à 600 pages.
+      <em>Repères tarifaires : docs Anthropic, septembre 2026.</em>
+    </p>
+  </details>
+
+  <footer>
+    Outil conçu par <a href="https://www.lilian-barty.fr/" target="_blank">Lilian Barty-Christophe</a> &middot;
+    <a href="https://tidycal.com/lilianchristophe/45-minute-meeting" target="_blank">Parler à un expert</a> &middot;
+    <a href="mailto:lilianchristophe.pro@gmail.com">lilianchristophe.pro@gmail.com</a>
+  </footer>
+
+</div>
+<script>
+/* ══════════════════════════════════════════════════════════════
+   MOTEUR V3 — analyse de tâche (négations + familles + coût)
+
+   Pipeline :
+   1. normalisation + découpage en propositions (scope de négation)
+   2. détection des signaux NON niés, rangés par famille
+   3. classification de la famille dominante  → modèle de base
+   4. modulation : dimensions, criticité, légèreté, volume, doc, longueur
+   5. effort sur un axe séparé (cinq réglages, aucun sur Haiku)
+   6. Fable 5.1 signalé en recours, jamais recommandé d'emblée
+   7. estimation de coût (ordre de grandeur) pour les 4 modèles
+══════════════════════════════════════════════════════════════ */
+
+const norm = s => s.toLowerCase().normalize('NFD').replace(/[̀-ͯ]/g,'');
+
+/* Marqueurs de négation — si l'un précède un signal dans la même
+   proposition (fenêtre courte), le signal est ignoré. */
+const NEG = ['sans','pas de','pas d','pas besoin','aucun','aucune','ni ',
+  'ne pas','inutile de','inutile d','eviter','evite','exclure','exclus',
+  'hors','sauf','plutot que','au lieu de','non '];
+
+/* Signaux — [motif, poids, famille, label]
+   familles : mech · write · analyze · build                              */
+const SIGNALS = [
+  /* BUILD — conception, architecture, stratégie, droit, sécurité */
+  ['architecture',9,'build','architecture'],['architectural',9,'build','architecture'],
+  ['microservices',9,'build','microservices'],['multi-tenant',9,'build','multi-tenant'],
+  ['multi tenant',9,'build','multi-tenant'],['infrastructure',7,'build','infrastructure'],
+  ['systeme distribue',8,'build','distribué'],['refonte',7,'build','refonte'],
+  ['conception',6,'build','conception'],['concois',6,'build','conception'],
+  ['concevoir',6,'build','conception'],['concevez',6,'build','conception'],
+  ['legacy',6,'build','legacy'],['modernisation',6,'build','modernisation'],
+  ['migration',8,'build','migration'],['migrer',7,'build','migration'],
+  ['audit',7,'build','audit'],['auditer',7,'build','audit'],
+  ['strategie',7,'build','stratégie'],['strategique',7,'build','stratégie'],
+  ['roadmap',6,'build','roadmap'],['business plan',8,'build','business plan'],
+  ['positionnement',6,'build','positionnement'],['etude de marche',8,'build','étude de marché'],
+  ['plan de croissance',7,'build','plan de croissance'],
+  ['juridique',9,'build','juridique'],['contrat',8,'build','contrat'],
+  ['contractuel',8,'build','contrat'],['cgv',7,'build','CGV'],
+  ['rgpd',8,'build','RGPD'],['conformite',8,'build','conformité'],
+  ['mentions legales',7,'build','mentions légales'],
+  ['vulnerabilite',8,'build','vulnérabilité'],['pentest',8,'build','pentest'],
+  ['securise',6,'build','sécurisé'],['faille',7,'build','faille'],
+  ['page de vente',7,'build','page de vente'],['landing page',6,'build','landing page'],
+  ['proposition commerciale',7,'build','proposition commerciale'],
+  /* ANALYZE — raisonnement, comparaison, arbitrage */
+  ['analyse concurrentielle',7,'analyze','analyse concurrentielle'],
+  ['analyse strategique',7,'analyze','analyse stratégique'],
+  ['analyse',4,'analyze','analyse'],['analyser',4,'analyze','analyse'],
+  ['evaluer',4,'analyze','évaluation'],['evaluation',4,'analyze','évaluation'],
+  ['synthese',4,'analyze','synthèse'],['comparaison',5,'analyze','comparaison'],
+  ['compare',5,'analyze','comparaison'],['comparer',5,'analyze','comparaison'],
+  ['arbitrage',5,'analyze','arbitrage'],['trade-off',5,'analyze','trade-off'],
+  ['decision',4,'analyze','décision'],['prioriser',4,'analyze','priorisation'],
+  ['priorise',4,'analyze','priorisation'],['recommandation',4,'analyze','recommandation'],
+  ['optimiser',4,'analyze','optimisation'],['optimisation',4,'analyze','optimisation'],
+  ['approfondi',4,'analyze','approfondi'],['approfondie',4,'analyze','approfondi'],
+  ['interpreter',4,'analyze','interprétation'],['diagnostic',5,'analyze','diagnostic'],
+  ['multi-sources',5,'analyze','multi-sources'],['multi sources',5,'analyze','multi-sources'],
+  ['nuance',4,'analyze','nuance'],
+  /* WRITE — production de texte standard */
+  ['copywriting',5,'write','copywriting'],['article',3,'write','article'],
+  ['newsletter',3,'write','newsletter'],['sequence email',4,'write','séquence email'],
+  ['email',2,'write','email'],['mail',2,'write','email'],
+  ['rediger',3,'write','rédaction'],['redige',3,'write','rédaction'],
+  ['redaction',3,'write','rédaction'],['rapport',3,'write','rapport'],
+  ['presentation',2,'write','présentation'],['slides',2,'write','slides'],
+  ['script',2,'write','script'],['post linkedin',2,'write','post LinkedIn'],
+  ['carrousel',2,'write','carrousel'],['fiche de poste',3,'write','fiche de poste'],
+  ['recrutement',3,'write','recrutement'],['onboarding',2,'write','onboarding'],
+  ['brief',2,'write','brief'],['plan ',2,'write','plan'],['outline',2,'write','outline'],
+  /* MECH — transformation mécanique */
+  ['reformule',5,'mech','reformuler'],['reformuler',5,'mech','reformuler'],
+  ['corrige',5,'mech','corriger'],['corriger',5,'mech','corriger'],
+  ['traduis',5,'mech','traduire'],['traduire',5,'mech','traduire'],
+  ['traduction',5,'mech','traduction'],['resume',4,'mech','résumer'],
+  ['resumer',4,'mech','résumer'],['raccourcis',4,'mech','raccourcir'],
+  ['raccourcir',4,'mech','raccourcir'],['lister',3,'mech','lister'],
+  ['extrais',4,'mech','extraire'],['extraire',4,'mech','extraire'],
+  ['renomme',4,'mech','renommer'],['renommer',4,'mech','renommer'],
+  ['formate',4,'mech','formater'],['formater',4,'mech','formater'],
+  ['orthographe',5,'mech','orthographe'],['grammaire',5,'mech','grammaire'],
+  ['snippet',3,'mech','snippet'],['reecris',3,'mech','réécrire'],
+  ['reecrire',3,'mech','réécrire'],['met en forme',4,'mech','mise en forme'],
+  ['classe',3,'mech','classer'],['trier',3,'mech','trier'],
+  ['convertir',4,'mech','convertir'],['nettoie',4,'mech','nettoyer'],
+];
+
+/* Dimensions transverses — chacune tire vers analyze/build */
+const DIMS = {
+  seo:'SEO',referencement:'SEO',ux:'UX',ergonomie:'UX',utilisabilite:'UX',ui:'UI',
+  design:'Design',visuel:'Design',branding:'Branding',identite:'Branding',
+  performance:'Perf',perf:'Perf',vitesse:'Perf',pagespeed:'Perf',cwv:'Perf',
+  accessibilite:'A11y',wcag:'A11y',securite:'Sécurité',contenu:'Contenu',
+  editorial:'Contenu',technique:'Technique',conversion:'Conversion',cro:'Conversion',
+  mobile:'Mobile',responsive:'Mobile',analytics:'Analytics',ga4:'Analytics',
+  copywriting:'Copywriting',architecture:'Architecture',
+};
+
+/* Criticité — pousse effort + peut bumper le modèle */
+const CRIT = [
+  ['exhaustif',2,3,'exhaustif'],['exhaustive',2,3,'exhaustif'],['complet',1,2,'complet'],
+  ['complete',1,2,'complet'],['critique',1,2,'critique'],['en production',2,3,'en production'],
+  ['en prod',2,3,'en production'],['client final',2,3,'client final'],
+  ['pour un client',1,2,'pour un client'],['irreversible',2,3,'irréversible'],
+  ['sans erreur',2,3,'sans erreur'],['imperativement',1,2,'impérativement'],
+  ['enjeu',1,2,'enjeu'],['version finale',1,2,'finale'],['rien rater',2,3,'rien à rater'],
+  ['rien oublier',2,3,'rien à oublier'],['en detail',1,2,'en détail'],
+  ['le plus possible',1,2,'au max'],['tous les',1,1,'exhaustif'],['chaque',1,1,'chaque cas'],
+];
+
+/* Légèreté — tire vers le bas */
+const LIGHT = [
+  ['juste',3,2,'juste'],['rapidement',3,2,'rapidement'],['vite',2,2,'vite'],
+  ['simple',2,1,'simple'],['basique',3,2,'basique'],['rapide',2,2,'rapide'],
+  ['en 5 min',3,2,'5 min'],['en 2 min',4,2,'2 min'],['un petit',2,1,'petit'],
+  ['pour tester',2,1,'test'],['juste pour voir',3,2,'test rapide'],
+  ['brouillon',2,1,'brouillon'],['premiere version',2,1,'v1'],['draft',2,1,'draft'],
+];
+
+/* Volume — tâches répétitives : on privilégie le moins cher */
+const VOLUME = ['en masse','en lot','batch','x10','x100','des dizaines',
+  'des centaines','en serie','repetitif','en volume','a la chaine','chacun'];
+
+/* Verbes de transformation — intention « je transforme un contenu existant ».
+   S'ils sont présents, un nom-sujet lourd (« contrat », « juridique ») est
+   l'OBJET de la tâche, pas une demande de création : l'intention prime. */
+const TRANSFORM = ['traduis','traduire','resume','resumer','reformule','reformuler',
+  'corrige','corriger','extrais','extraire','raccourcis','raccourcir','formate','formater'];
+
+/* Nature de la tâche — axe « exécution cadrée ↔ jugement ».
+   Reprend la règle de bascule de modèle de la méthodo de passation :
+   le cadré (factuel, règles explicites) se délègue à un modèle léger ;
+   le jugement (stratégie, pricing, angle, arbitrage, décision) exige le
+   plus capable, sinon travail médiocre livré sans que le modèle le signale. */
+const JUDGE = ['strategie','strategique','pricing','tarification','fixer le prix',
+  'angle','ligne editoriale','ton juste','trancher','arbitr','diagnostic',
+  'positionnement','negociation','convaincre','persuader','decision','delicat',
+  'sensible','publier','en public','page de vente','argumentaire','nuance',
+  'conseil','recommand','enjeu','subtil','jugement'];
+const FRAMED = ['selon le modele','selon le template','d apres','a partir du modele',
+  'en suivant','remplir','recopier','appliquer','gabarit','format impose',
+  'consignes','cadre','recense','recenser','extraire','convertir','liste des'];
+
+/* Agentique au long cours : travail multi-étapes autonome, de bout en
+   bout, sans supervision. Pousse l'effort en xhigh (l'usage qu'Anthropic
+   lui réserve) et, sur Opus, fait signaler Fable 5.1 en recours. */
+const AGENTIC = ['agent autonome','agentique','en autonomie','de bout en bout',
+  'end-to-end','sans supervision','multi-etapes','multi etapes','longue haleine',
+  'sur plusieurs jours','workflow complet','orchestre','orchestrer','pipeline complet'];
+
+/* Lecture de contenu */
+const DOCREAD = ['pdf','document','fichier','piece jointe','ci-joint','ci joint',
+  'image','photo','capture','screenshot','scan','ce rapport','le rapport',
+  'cette image','ce fichier','ce doc','diapositive'];
+const BIGDOC = ['gros pdf','gros document','long document','document volumineux',
+  'volumineux','centaines de pages','tout le document','tout le rapport',
+  'plusieurs documents','plusieurs pdf','rapport entier','livre entier'];
+
+/* Tarifs $/million de tokens (docs Anthropic, septembre 2026 :
+   Haiku 4.5, Sonnet 5, Opus 5.5, Fable 5.1). Le tarif de lancement de
+   Sonnet 5 (2/10) est devenu son prix standard : la hausse à 3/15 prévue
+   au 1er septembre 2026 n'a pas eu lieu. */
+const PRICE = {
+  Haiku : {in:1,  out:5},
+  Sonnet: {in:2,  out:10},
+  Opus  : {in:4,  out:20},
+  Fable : {in:10, out:50},
+};
+/* Taille de tâche nominale (tokens) selon la longueur du prompt */
+function nominalTokens(words, bigDoc){
+  let inTok = 400 + words*8;          // contexte + prompt
+  if(bigDoc) inTok += 120000;         // gros doc chargé
+  const outTok = 300 + words*4;
+  return {inTok, outTok};
+}
+function costPer1000(model, tk){
+  const p = PRICE[model];
+  return ((p.in*tk.inTok + p.out*tk.outTok)/1e6)*1000; // $ / 1000 requêtes
+}
+function fmtMoney(v){
+  if(v >= 100) return '≈ '+Math.round(v).toLocaleString('fr-FR')+' $';
+  if(v >= 10)  return '≈ '+v.toFixed(0)+' $';
+  return '≈ '+v.toFixed(1).replace('.', ',')+' $';
+}
+/* Rapport de prix, virgule décimale : 10, 5, 2,5 */
+function fmtX(v){
+  return String(Math.round(v*10)/10).replace('.', ',');
+}
+
+/* ── Détection de négation dans une fenêtre avant le signal ── */
+function isNegated(text, idx){
+  const before = text.slice(Math.max(0, idx-32), idx);
+  return NEG.some(n => before.includes(' '+n) || before.startsWith(n));
+}
+/* Le motif figure dans le texte normalisé, sans négation devant */
+function present(text, w){
+  const idx = text.indexOf(norm(w));
+  return idx !== -1 && !isNegated(text, idx);
+}
+/* Cumule les poids d'une liste [motif, poids modèle, poids effort, label]
+   (criticité ou légèreté) ; un même label ne compte qu'une fois */
+function weigh(text, list, hits){
+  let m = 0, e = 0;
+  for(const [w,pm,pe,lbl] of list){
+    if(present(text, w) && !hits.includes(lbl)){ m += pm; e += pe; hits.push(lbl); }
+  }
+  return {m, e};
+}
+
+/* ── Moteur principal ── */
+function analyze(raw){
+  const t = ' '+norm(raw)+' ';
+  const words = (raw.trim().match(/\S+/g)||[]).length;
+
+  const fam = {mech:0, write:0, analyze:0, build:0};
+  const hit = {build:[], analyze:[], write:[], mech:[], crit:[], light:[], volume:[], dims:[], neg:[], doc:null};
+  const usedS = new Set();
+
+  for(const [w,pts,f,lbl] of SIGNALS){
+    const key = norm(w);
+    const idx = t.indexOf(key);
+    if(idx === -1) continue;
+    if(isNegated(t, idx)){ if(!hit.neg.includes(lbl)) hit.neg.push(lbl); continue; }
+    if(usedS.has(lbl)) continue;
+    usedS.add(lbl);
+    fam[f] += pts;
+    hit[f].push(lbl);
+  }
+
+  // Dimensions
+  const seenD = new Set();
+  for(const k in DIMS){
+    const d = DIMS[k];
+    if(seenD.has(d)) continue;
+    const re = new RegExp('(^|[^a-z])'+norm(k)+'([^a-z]|$)');
+    if(re.test(t)){ seenD.add(d); hit.dims.push(d); }
+  }
+  // les dimensions renforcent l'analyse (croisement de sujets)
+  fam.analyze += hit.dims.length * 4;
+  if(hit.dims.length >= 3) fam.build += 4;
+
+  // Criticité / légèreté
+  const {m:critM,  e:critE}  = weigh(t, CRIT,  hit.crit);
+  const {m:lightM, e:lightE} = weigh(t, LIGHT, hit.light);
+  // Volume
+  for(const w of VOLUME){ if(t.includes(norm(w)) && !hit.volume.includes(w)) hit.volume.push(w); }
+
+  // Lecture doc
+  const docRead = DOCREAD.some(w=>t.includes(norm(w)));
+  let bigDoc  = BIGDOC.some(w=>t.includes(norm(w)));
+  const mPages = t.match(/(\d{2,4})\s*pages?/);
+  if(mPages && parseInt(mPages[1],10) >= 100) bigDoc = true;
+  if(docRead) hit.doc = bigDoc ? 'gros document' : 'lecture document';
+
+  // Intention de transformation (verbe) — prime sur un nom-sujet lourd
+  const transformIntent = TRANSFORM.some(w => present(t, w));
+  // Travail autonome au long cours (liste AGENTIC)
+  const agentic = AGENTIC.some(w => present(t, w));
+
+  /* ── Arbre de décision : famille dominante ── */
+  const order = ['build','analyze','write','mech'];
+  let family = 'none', best = 0;
+  for(const f of order){ if(fam[f] > best){ best = fam[f]; family = f; } }
+
+  // Aucun signal fort → on devine par la structure
+  if(family === 'none'){
+    // un agent autonome sans autre signal n'est pas une tâche courte et bornée
+    if(agentic || words >= 40) family = 'analyze';
+    else if(words >= 14) family = 'write';
+    else family = 'mech';
+  }
+
+  // Verbe de transformation sur un objet expert (« traduis ce contrat ») :
+  // c'est une transformation, pas une création → on recadre en mécanique,
+  // mais on retient que le contenu est dense (plancher Sonnet plus bas).
+  let richTransform=false;
+  if(transformIntent && (family==='build' || family==='analyze')){ family='mech'; richTransform=true; }
+
+  // Modèle de base par famille
+  let model = ({mech:'Haiku', write:'Sonnet', analyze:'Sonnet', build:'Opus'})[family];
+
+  // Modulations
+  const bumps = [];
+  // analyze → Opus si sujet lourd
+  if(family==='analyze' && (hit.dims.length>=2 || best>=10 || critM>=2)){ model='Opus'; bumps.push('sujet à croiser'); }
+  // criticité forte peut monter d'un cran
+  if(critM>=3 && model==='Sonnet'){ model='Opus'; bumps.push('enjeu critique'); }
+  // légèreté forte redescend d'un cran (sauf criticité)
+  if((lightM>=4) && critM===0){
+    if(model==='Opus'){ model='Sonnet'; bumps.push('tâche allégée'); }
+    else if(model==='Sonnet' && family!=='write'){ model='Haiku'; bumps.push('tâche allégée'); }
+  }
+  // volume → un cran moins cher, sauf criticité
+  if(hit.volume.length && critM===0){
+    if(model==='Opus'){ model='Sonnet'; bumps.push('volume (un cran moins cher)'); }
+    else if(model==='Sonnet'){ model='Haiku'; bumps.push('volume (un cran moins cher)'); }
+  }
+  // transformation d'un contenu expert → plancher Sonnet (nuance à préserver)
+  if(richTransform && model==='Haiku'){ model='Sonnet'; bumps.push('contenu expert à préserver'); }
+
+  /* ── Nature : exécution cadrée ↔ jugement ── */
+  const jHits = JUDGE.filter(w => present(t, w)).length;
+  const fHits = FRAMED.filter(w => present(t, w)).length;
+  const judgeW  = fam.build*1.0 + fam.analyze*0.8 + critM*1.5 + jHits*4 + hit.dims.length*1.5 + 1;
+  const framedW = fam.mech*1.0 + fam.write*0.4 + lightM*1.2 + hit.volume.length*3 + fHits*3 + (transformIntent?3:0) + 1;
+  const naturePct = Math.max(6, Math.min(94, Math.round(judgeW/(judgeW+framedW)*100)));
+  let natLabel, natRule;
+  if(naturePct>=63){
+    natLabel='Jugement';
+    natRule=`Terrain de <b>jugement</b> : stratégie, arbitrage, écriture publique ou décision à conséquences. C'est là qu'un modèle trop léger rend un travail médiocre <b>sans le signaler</b>. On ne descend pas le modèle ici.`;
+  } else if(naturePct<=37){
+    natLabel='Exécution cadrée';
+    natRule=`<b>Exécution cadrée</b> : règles explicites, résultat vérifiable. Un modèle léger suffit : le surdimensionner ne rend pas la tâche meilleure, seulement plus chère.`;
+  } else {
+    natLabel='Mixte';
+    natRule=`Zone <b>mixte</b> : une part cadrée, une part de jugement. Découpez la tâche : déléguez le mécanique à un modèle léger, gardez la partie sensible sur le plus capable.`;
+  }
+  const nature = {pct:naturePct, label:natLabel, rule:natRule};
+
+  // Le jugement interdit de rétrograder trop bas (sauf simple transformation)
+  if(naturePct>=63 && model==='Haiku' && !richTransform && !bigDoc){
+    model='Sonnet'; bumps.push('terrain de jugement');
+  }
+
+  // gros doc exclut Haiku
+  let forcedFromHaiku=false;
+  if(bigDoc && model==='Haiku'){ model='Sonnet'; forcedFromHaiku=true; }
+
+  /* ── Effort (axe séparé) ──
+     Les cinq réglages de l'API et de Claude Code (low, medium, high,
+     xhigh, max). Haiku 4.5 n'a pas de réglage d'effort. */
+  let es = ({mech:0, write:1, analyze:2, build:3})[family];
+  es += critE - lightE;
+  if(hit.dims.length>=2) es += 1;
+  if(hit.dims.length>=3) es += 1;
+  if(words>30) es += 1;
+  if(bigDoc) es += 1;
+  if(richTransform) es = Math.max(es, 2); // contenu dense → au moins Haut
+  es = Math.max(0, es);
+  let effort = es===0 ? 'Bas' : es===1 ? 'Moyen' : es<6 ? 'Haut' : 'Max';
+  // travail autonome au long cours : xhigh, l'usage qu'Anthropic lui réserve
+  if(agentic && effort==='Haut') effort='Très haut';
+  if(model==='Haiku') effort='Sans réglage';
+
+  /* ── Fable 5.1 : un recours, jamais une recommandation d'emblée ──
+     Opus 5.5 fait jeu égal avec Fable 5.1 sur la plupart des tâches pour
+     2,5× moins cher, et Anthropic conseille de commencer par lui. Sur les
+     deux terrains de Fable (agentique au long cours, extrême du jugement
+     critique), l'outil garde Opus et signale Fable en recours. */
+  const recours = model!=='Opus' ? ''
+    : agentic ? 'agentique'
+    : (critM>=3 && (naturePct>=70 || hit.dims.length>=3)) ? 'critique' : '';
+
+  /* ── Justification ── */
+  const FAMLBL = {mech:'transformation mécanique', write:'rédaction standard',
+                  analyze:'analyse / raisonnement', build:'conception / expertise'};
+  let why;
+  if(forcedFromHaiku) why = 'gros document, trop long pour Haiku';
+  else if(family==='build') why = hit.build[0] || 'tâche de conception';
+  else if(family==='analyze' && hit.dims.length>=2) why = `${hit.dims.length} dimensions à croiser`;
+  else if(family==='analyze') why = hit.analyze[0] || 'raisonnement demandé';
+  else if(family==='write') why = hit.write[0] || 'production de texte';
+  else why = hit.light.length ? `tâche allégée, «&nbsp;${hit.light[0]}&nbsp;»` : (hit.mech[0] || 'tâche courte et bornée');
+
+  /* ── Coûts ── */
+  const tk = nominalTokens(words, bigDoc);
+  const costs = Object.fromEntries(Object.keys(PRICE).map(m => [m, costPer1000(m, tk)]));
+
+  // Note capacité
+  let note='';
+  if(docRead && bigDoc)
+    note=`Gros document détecté. Tous les modèles lisent les PDF, mais <b>Haiku plafonne à 100 pages</b> par requête. Sonnet 5, Opus 5.5 et Fable 5.1 ont un contexte d'un million de tokens et lisent jusqu'à 600 pages : des rapports entiers passent en une requête.`;
+  else if(docRead)
+    note=`Haiku, Sonnet, Opus et Fable lisent <b>tous</b> texte, images et PDF. Seule différence : la capacité (Haiku plafonne à 100 pages, les trois autres ont un contexte d'un million de tokens).`;
+
+  return {model, effort, why, family, famLabel:FAMLBL[family]||'tâche', fam, best, es,
+          hit, dims:[...seenD], bumps, note, costs, tk, bigDoc, forcedFromHaiku, nature, recours};
+}
+
+/* ── Méta ── Fable n'est jamais recommandé : il n'a qu'une couleur, pour sa barre de coût */
+const M = {
+  Haiku:  {c:'var(--haiku)',  desc:'Rapide & économique'},
+  Sonnet: {c:'var(--sonnet)', desc:'Équilibré. Couvre 80&nbsp;% des tâches.'},
+  Opus:   {c:'var(--opus)',   desc:'Raisonnement profond'},
+  Fable:  {c:'var(--fable)'},
+};
+/* api : la valeur à régler dans Claude Code ou dans l'API */
+const E = {
+  'Sans réglage':{c:'var(--soft)',  api:'',       desc:'Haiku 4.5 ne propose pas ce réglage'},
+  Bas:           {c:'var(--bas)',   api:'low',    desc:'Tâche simple, au moindre coût'},
+  Moyen:         {c:'var(--moyen)', api:'medium', desc:'Vérification rapide, 1 dimension'},
+  Haut:          {c:'var(--haut)',  api:'high',   desc:'Analyse sérieuse, plusieurs angles'},
+  'Très haut':   {c:'var(--xhaut)', api:'xhigh',  desc:'Travail autonome au long cours'},
+  Max:           {c:'var(--max)',   api:'max',    desc:'Exhaustif. Ne rien rater.'},
+};
+
+let prevResult=null;
+
+/* ── Rendu mode simple ── */
+function render(r){
+  const m=M[r.model], ef=E[r.effort];
+  const modelChanged  = !prevResult || prevResult.model !== r.model;
+  const effortChanged = !prevResult || prevResult.effort !== r.effort;
+
+  const chips=[];
+  r.dims.forEach(d      => chips.push(`<span class="chip c-dim">dim : <b>${d}</b></span>`));
+  r.hit.build.forEach(w => chips.push(`<span class="chip c-opus"><b>${w}</b></span>`));
+  r.hit.analyze.forEach(w=>chips.push(`<span class="chip c-medium"><b>${w}</b></span>`));
+  r.hit.write.forEach(w => chips.push(`<span class="chip c-medium"><b>${w}</b></span>`));
+  r.hit.crit.forEach(w  => chips.push(`<span class="chip c-crit">⬆ <b>${w}</b></span>`));
+  r.hit.mech.forEach(w  => chips.push(`<span class="chip c-haiku"><b>${w}</b></span>`));
+  r.hit.light.forEach(w => chips.push(`<span class="chip c-light">⬇ <b>${w}</b></span>`));
+  r.hit.volume.forEach(w=> chips.push(`<span class="chip c-haiku">vol. <b>${w}</b></span>`));
+  r.hit.neg.forEach(w   => chips.push(`<span class="chip c-neg">${w}</span>`));
+  if(r.hit.doc) chips.push(`<span class="chip c-doc">contenu : <b>${r.hit.doc}</b></span>`);
+
+  // « Exhaustif. Ne rien rater. » devient « exhaustif, ne rien rater » dans la phrase
+  const efTxt = ef.desc.replace(/\.\s+(\S)/g, (_,c)=>', '+c.toLowerCase()).replace(/\.$/,'');
+  let rationale = `Tâche classée <b>${r.famLabel}</b> (${r.why}), donc <b>${r.model}</b>. `
+    + (r.model==='Haiku' ? `Pas de réglage d'effort sur Haiku 4.5.`
+                         : `Effort <b>${r.effort}</b> : ${efTxt.charAt(0).toLowerCase()+efTxt.slice(1)}.`);
+  if(r.bumps.length) rationale += ` Ajusté : ${r.bumps.join(', ')}.`;
+
+  // Opus 5.5 démarre en medium : on le dit dès que l'outil conseille plus haut
+  const noteOpus = (r.model==='Opus' && ['Haut','Très haut','Max'].includes(r.effort))
+    ? `<div class="note n-effort"><b>Opus 5.5 démarre en effort moyen</b> (réglage d'usine). Passez-le sur «&nbsp;${ef.api}&nbsp;» avant de lancer, sinon il travaille en dessous de ce que la tâche demande.</div>`
+    : '';
+  const noteFable = !r.recours ? ''
+    : `<div class="note n-fable"><b>Recours : Fable 5.1</b>, plus lent et ${fmtX(r.costs.Fable/r.costs.Opus)} fois plus cher. Seulement si Opus 5.5 ${r.recours==='agentique' ? 'ne tient pas la distance sur ce travail autonome' : 'ne suffit pas'}, même en effort max.</div>`;
+
+  // coûts
+  const maxCost = Math.max(...Object.values(r.costs));
+  const costRow = name => {
+    const v=r.costs[name], pct=Math.max(3,(v/maxCost)*100), reco=name===r.model;
+    return `<div class="cost-row ${reco?'reco':'dim'}">
+      <span class="cost-name m-${name}">${name}</span>
+      <div class="cost-bar"><i style="width:${pct}%;background:${M[name].c}"></i></div>
+      <span class="cost-val"><b>${fmtMoney(v)}</b> /1k</span></div>`;
+  };
+  // sur-coût vs reco
+  const recoCost=r.costs[r.model];
+  let foot='';
+  if(r.model==='Opus'){
+    foot=`<b>Opus</b> est le bon arbitrage : Fable 5.1 coûterait <span class="warn">${fmtX(r.costs.Fable/recoCost)} fois plus cher</span> pour un niveau équivalent sur la plupart des tâches, d'après Anthropic.`;
+  } else {
+    foot=`Prendre le plus gros modèle (Fable) coûterait <span class="warn">${fmtX(r.costs.Fable/recoCost)} fois plus cher</span> sans gain attendu sur ce type de tâche. <b>${r.model}</b> est le bon arbitrage.`;
+  }
+
+  // nature (cadré ↔ jugement)
+  const nat=r.nature;
+  const natColor = nat.label==='Jugement' ? 'var(--hero)'
+    : nat.label==='Exécution cadrée' ? 'var(--green)' : 'var(--moyen)';
+
+  document.getElementById('out').innerHTML = `
+    <div class="result">
+      <div class="pill${modelChanged?' pill-flip':''}">
+        <div class="pill-glow" style="background:radial-gradient(300px 150px at 0 0,${m.c},transparent)"></div>
+        <div class="ptitle">Modèle suggéré</div>
+        <div class="badge"><span class="dot" style="background:${m.c};color:${m.c}"></span>${r.model}</div>
+        <div class="sub">${m.desc}</div>
+      </div>
+      <div class="pill${effortChanged?' pill-flip':''}">
+        <div class="pill-glow" style="background:radial-gradient(300px 150px at 100% 0,${ef.c},transparent)"></div>
+        <div class="ptitle">Niveau d'effort</div>
+        <div class="badge"><span class="dot" style="background:${ef.c};color:${ef.c}"></span>${r.effort}</div>
+        <div class="sub">${ef.desc}${ef.api ? `<span class="api">Réglage : <b>${ef.api}</b></span>` : ''}</div>
+      </div>
+    </div>
+    ${noteOpus}
+    <div class="nature">
+      <div class="nature-head">
+        <span class="t">Nature de la tâche</span>
+        <span class="verdict" style="color:${natColor}">${nat.label}</span>
+      </div>
+      <div class="spectrum"><span class="mark" style="left:${nat.pct}%;color:${natColor}"></span></div>
+      <div class="spectrum-lbls"><span class="l">Exécution cadrée</span><span class="r">Jugement / finesse</span></div>
+      <div class="nature-rule">${nat.rule}</div>
+      <div class="nature-src">Cet axe reprend la règle que j'utilise pour décider quel modèle fait tourner mon propre assistant : le cadré se délègue à un modèle léger, le jugement se garde sur le plus capable. L'économie se joue là, dans l'arbitrage, pas dans le prix du modèle.</div>
+    </div>
+    <div class="why">
+      <div class="rationale">${rationale}</div>
+      ${chips.length ? `<div class="chips">${chips.join('')}</div>`
+        : `<div class="chips"><span class="chip">aucun signal fort, classé par structure</span></div>`}
+      ${r.note ? `<div class="note">${r.note}</div>` : ''}
+      ${noteFable}
+      <span class="score">famille — build ${r.fam.build} · analyse ${r.fam.analyze} · rédaction ${r.fam.write} · mécanique ${r.fam.mech} &nbsp;·&nbsp; effort ${r.es}</span>
+    </div>
+    <div class="cost">
+      <div class="cost-head">
+        <span class="t">Coût estimé — ordre de grandeur</span>
+        <span class="sz">~${(r.tk.inTok/1000).toFixed(r.bigDoc?0:1).replace('.', ',')}k tok. entrée${r.bigDoc?' (gros doc)':''}</span>
+      </div>
+      <div class="cost-rows">
+        ${Object.keys(PRICE).map(costRow).join('')}
+      </div>
+      <div class="cost-foot">${foot}</div>
+      <div class="cost-disc">Estimation indicative pour 1&nbsp;000 requêtes d'une taille comparable à votre prompt. Tarifs : docs Anthropic, septembre 2026 (Haiku 4.5, Sonnet 5, Opus 5.5, Fable 5.1), hors mise en cache et remises sur volume. L'effort n'entre pas dans le calcul : plus il est haut, plus la réponse consomme.</div>
+    </div>`;
+
+  requestAnimationFrame(()=>{
+    document.querySelectorAll('.chips .chip').forEach((chip,i)=>{
+      chip.style.cssText += `;animation:chipIn .26s cubic-bezier(.34,1.5,.64,1) ${i*55}ms forwards`;
+    });
+  });
+  prevResult={model:r.model, effort:r.effort};
+}
+
+/* ── Rendu mode batch ── */
+function renderBatch(lines){
+  const rows = lines.map(l => ({txt:l, r:analyze(l)}));
+  let over=0, cheap=0, totalReco=0, totalTop=0;
+  rows.forEach(({r})=>{
+    totalReco += r.costs[r.model];
+    totalTop  += r.costs.Fable;
+    if(r.model!=='Opus') over++;
+    if(r.model==='Haiku') cheap++;
+  });
+  const saved = totalTop-totalReco;
+
+  const trs = rows.map(({txt,r})=>{
+    const short = txt.length>70 ? txt.slice(0,68)+'…' : txt;
+    return `<tr>
+      <td class="b-prompt">${short.replace(/</g,'&lt;')}</td>
+      <td class="b-model m-${r.model}">${r.model}</td>
+      <td class="b-eff">${r.effort}</td>
+      <td class="b-cost">${fmtMoney(r.costs[r.model])} /1k</td>
+    </tr>`;
+  }).join('');
+
+  document.getElementById('out').innerHTML = `
+    <div class="batch-out">
+      <div class="batch-summary">
+        <b>${rows.length}</b> tâche${rows.length>1?'s':''} analysée${rows.length>1?'s':''} :
+        ${over} sous le haut de gamme${cheap ? `, dont ${cheap} en Haiku` : ''}.<br>
+        En dimensionnant chaque tâche au lieu de tout passer sur le plus gros modèle :
+        <b>${fmtMoney(saved)} économisés / 1&nbsp;000 requêtes</b> <span class="warn">(soit ${fmtX(totalTop/Math.max(totalReco,.001))} fois moins cher)</span>.
+      </div>
+      <table class="btable">
+        <tr><th>Tâche</th><th>Modèle</th><th>Effort</th><th>Coût /1k</th></tr>
+        ${trs}
+      </table>
+    </div>`;
+}
+
+/* ── Empty state ── */
+const EMPTY = `<div class="why"><div class="empty">Commencez à écrire, par exemple : <span class="ghost" id="ghost"></span><span class="caret"></span></div></div>`;
+const ta = document.getElementById('prompt');
+const cta = document.getElementById('cta');
+let ctaShown=false, mode='single';
+
+const GHOST=[
+  'reformule ce paragraphe',
+  'audit complet SEO + UX + UI, priorise',
+  'conçois une architecture multi-tenant sécurisée',
+  'traduis ce mail en anglais',
+  'compare ces deux stratégies et tranche',
+];
+let typeTimer=null, ghostI=0;
+function startGhost(){
+  stopGhost();
+  const el=document.getElementById('ghost'); if(!el) return;
+  let phrase=GHOST[ghostI%GHOST.length], ci=0, dir=1;
+  (function tick(){
+    el.textContent=phrase.slice(0,ci);
+    if(dir>0){ ci++; if(ci>phrase.length){ dir=-1; typeTimer=setTimeout(tick,1500); return; } }
+    else{ ci--; if(ci<0){ dir=1; ghostI++; phrase=GHOST[ghostI%GHOST.length]; ci=0; } }
+    typeTimer=setTimeout(tick, dir>0?58:24);
+  })();
+}
+function stopGhost(){ if(typeTimer){ clearTimeout(typeTimer); typeTimer=null; } }
+
+function update(){
+  if(mode==='batch'){
+    const lines=ta.value.split('\n').map(s=>s.trim()).filter(s=>s.length>=3);
+    if(!lines.length){ document.getElementById('out').innerHTML=`<div class="why"><div class="empty">Une tâche par ligne : collez votre liste de prompts récurrents.</div></div>`; return; }
+    stopGhost();
+    renderBatch(lines);
+    if(!ctaShown){ cta.classList.add('show'); ctaShown=true; }
+    return;
+  }
+  const v=ta.value.trim();
+  if(v.length<3){ document.getElementById('out').innerHTML=EMPTY; startGhost(); return; }
+  stopGhost();
+  render(analyze(ta.value));
+  if(!ctaShown){ cta.classList.add('show'); ctaShown=true; }
+}
+ta.addEventListener('input', update);
+
+/* ── Switch de mode ── */
+function setMode(mo){
+  mode=mo;
+  document.getElementById('m-single').classList.toggle('on', mo==='single');
+  document.getElementById('m-batch').classList.toggle('on', mo==='batch');
+  const single = mo==='single';
+  ta.classList.toggle('batch', !single);
+  document.getElementById('fieldlbl').textContent = single ? 'Votre prompt' : 'Vos tâches (une par ligne)';
+  document.getElementById('fieldhint').textContent = single ? 'tapez comme vous parleriez à l\'IA' : 'collez plusieurs prompts, un par ligne';
+  ta.placeholder = single
+    ? 'Ex : Fais-moi un audit complet SEO, UX et UI de ce site et priorise les recommandations…'
+    : 'Reformule ce mail\nTraduis ce contrat en anglais\nAudit SEO complet du site + priorise\nRésume ce PDF de 200 pages';
+  document.getElementById('examples').style.display = single ? 'flex' : 'none';
+  prevResult=null;
+  update();
+}
+document.getElementById('m-single').onclick=()=>setMode('single');
+document.getElementById('m-batch').onclick=()=>setMode('batch');
+
+/* ── Exemples ── */
+const EX=[
+  'Reformule ce paragraphe pour qu\'il soit plus percutant',
+  'Corrige les fautes de ce texte',
+  'Juste un email de relance rapide pour un prospect',
+  'Fais un audit complet SEO, UX et UI de ce site et priorise les actions',
+  'Conçois l\'architecture d\'une app multi-tenant sécurisée',
+  'Compare en profondeur ces deux stratégies de contenu et tranche',
+  'Agent autonome qui gère ma migration de bout en bout',
+];
+const exWrap=document.getElementById('examples');
+EX.forEach((tx,i)=>{
+  const b=document.createElement('span');
+  b.className='ex';
+  b.style.animationDelay=(140+i*70)+'ms';
+  b.textContent = tx.length>42 ? tx.slice(0,40)+'…' : tx;
+  b.title=tx;
+  b.onclick=()=>{ ta.value=tx; update(); ta.focus(); };
+  exWrap.appendChild(b);
+});
+
+update();
+</script>
+<script src="/consent.js" defer></script>
+</body>
+</html>
