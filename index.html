@@ -40,7 +40,7 @@
     --moyen:#94a3b8;
     --haut:#e8820c;
     --xhaut:#f4511e;
-    --max:#fe2400;
+    --max:#EF4A2F;
     --orange:#e8820c;
     --orange-dim:#c67b00;
     --orange-glow:rgba(232,130,12,.12);
@@ -69,7 +69,7 @@
   .brand h1{
     font-size:21px;font-weight:800;color:var(--txt);letter-spacing:-.02em;
   }
-  .brand h1 span{color:var(--hero)}
+  .brand 
   .brand p{font-size:13px;color:var(--muted);margin-top:5px;max-width:440px}
   .brand .by{
     display:block;font-size:11px;color:var(--soft);margin-top:8px;
@@ -157,7 +157,7 @@
   .chip.c-opus  {border-color:rgba(217,168,214,.35);background:rgba(217,168,214,.08);color:var(--hero)}
   .chip.c-haiku {border-color:rgba(74,222,128,.35);background:rgba(74,222,128,.07);color:#86efac}
   .chip.c-dim   {border-color:rgba(192,132,199,.4);background:rgba(192,132,199,.08);color:var(--sonnet)}
-  .chip.c-crit  {border-color:rgba(254,36,0,.35);background:rgba(254,36,0,.07);color:var(--max)}
+  .chip.c-crit  {border-color:rgba(239,74,47,.35);background:rgba(239,74,47,.07);color:var(--max)}
   .chip.c-medium{border-color:rgba(232,130,12,.4);background:var(--orange-glow);color:var(--orange)}
   .chip.c-light {border-color:rgba(148,163,184,.3);background:rgba(148,163,184,.06);color:var(--moyen)}
   .chip.c-doc   {border-color:rgba(192,132,199,.4);background:rgba(192,132,199,.08);color:var(--sonnet)}
@@ -169,7 +169,15 @@
     border-left:3px solid var(--sonnet);border-radius:8px;padding:10px 13px;
   }
   .note b{color:var(--txt);font-weight:600}
-  .note.n-effort{border-left-color:var(--haut)}
+  .prep{
+    margin-top:14px;background:var(--panel);border:1px solid var(--border);
+    border-left:3px solid var(--haut);border-radius:var(--radius);padding:16px 18px;
+  }
+  .prep .t{font-size:10px;font-weight:700;color:var(--orange);text-transform:uppercase;letter-spacing:.14em;margin-bottom:8px}
+  .prep ul{list-style:none;display:grid;gap:8px}
+  .prep li{font-size:13px;line-height:1.55;color:var(--muted);padding-left:16px;position:relative}
+  .prep li::before{content:'→';position:absolute;left:0;color:var(--orange-dim)}
+  .prep li b{color:var(--txt);font-weight:600}
   .note.n-fable{border-left-color:var(--fable)}
 
   /* ── NATURE (cadré ↔ jugement) ── */
@@ -356,6 +364,20 @@
    texte a fleche en sont exclus, ils n'ont ni fond ni bordure. */
 :root{--btn-radius:6px;}
 .btn,.btn-red,.btn-red-hero,.btn-red-lg,.btn-ghost,.btn-ghost-hero,.btn-white,.btn-bio,.btn-cta,.btn-au,.btn-top,.btn-export,.btn-add-tool,.btn-add-obj,.btn-cfg-secondary,.cta-box a,.cta-btn,.cta,.offre-cta,.offre-cta-solid,.offre-cta-outline,.profile-cta,.mob-cta-bar a,.cf-submit,.w3-submit,.s-cta,.s-cta-final,.uc-cta,.uc-promo-cta,.art-footer-cta,.afc-btn,.blog-cta,.bcta-btn,.dt-cta,.hero-cta,.dl-btn,.rv-gate-btn,.stab,.rbtn,.obj-btn,#launch-btn,.tdah-field button,.bq-btn,.st-btn{border-radius:var(--btn-radius);}
+
+/* ============================================================
+   RUBAN (charte v2.1, section « Le ruban »), posé sur le site le
+   28 septembre 2026 à la demande de Lilian : les accents de titre sont
+   surlignés au lieu d'être écrits dans une autre couleur.
+   La partie du titre qui porte l'idée est posée sur une bande corail de
+   biais, texte blanc (5,99:1), bouts coupés, dans la typographie du
+   titre. Un seul ruban par écran : là où deux titres à accent tombaient
+   dans le même écran (900 px au bureau, 812 px sur téléphone), le second
+   est repassé à l'encre. Valeurs fixes : le ruban est le même dans les
+   deux thèmes. Sur téléphone, un ruban trop long passe sur deux lignes
+   équilibrées, la forme de l'étiquette de couverture des carrousels.
+   ============================================================ */
+.ruban{display:inline-block;max-width:100%;color:#FFFFFF;background:#C2200A;padding:.02em .22em .08em;transform:rotate(-2.5deg);clip-path:polygon(3% 0,100% 0,97% 100%,0 100%);margin-top:.12em;text-wrap:balance;}
 </style>
 <script type="application/ld+json">
 {"@context":"https://schema.org","@type":"WebApplication","name":"Model Picker","url":"https://www.lilian-barty.fr/outils/model-picker/","applicationCategory":"DeveloperApplication","operatingSystem":"Web","inLanguage":"fr-FR","offers":{"@type":"Offer","price":"0","priceCurrency":"EUR"},"author":{"@type":"Person","name":"Lilian Barty-Christophe","url":"https://www.lilian-barty.fr/"}}
@@ -366,8 +388,8 @@
 
   <header>
     <div class="brand">
-      <h1>Quel modèle <span>Claude</span> pour ce prompt&nbsp;?</h1>
-      <p>Décrivez votre tâche. L'outil l'analyse (pas seulement ses mots-clés), recommande le modèle et l'effort, puis estime le coût. En direct, rien n'est envoyé.</p>
+      <h1>Quel modèle Claude <span class="ruban">pour ce prompt&nbsp;?</span></h1>
+      <p>Décrivez votre tâche. L'outil la lit en entier, recommande le modèle et l'effort, puis estime le coût. En direct, rien n'est envoyé.</p>
       <div class="by">Construit par <a href="https://www.lilian-barty.fr/" target="_blank">Lilian Barty-Christophe</a>, consultant IA, automatisation et revenu</div>
     </div>
     <div class="tag">Model Picker</div>
@@ -402,31 +424,41 @@
     <table class="ref">
       <tr><th>Type de tâche détecté</th><th>Recommandation</th></tr>
       <tr><td>Reformuler, corriger, traduire, résumer, extraire, formater</td><td>Haiku, sans réglage d'effort</td></tr>
-      <tr><td>Rédiger (email, article, rapport), tâche standard bornée</td><td>Sonnet, effort Bas à Haut</td></tr>
+      <tr><td>Le même travail sur un contrat, un dossier médical ou financier</td><td>Sonnet, effort Haut</td></tr>
+      <tr><td>Rédiger (email, article, post), expliquer, organiser</td><td>Sonnet, effort Bas à Haut</td></tr>
+      <tr><td>Chercher une information, faire une veille</td><td>Sonnet + recherche web</td></tr>
+      <tr><td>Choisir, conseiller, décider pour soi (assurance, argent, santé, droit)</td><td>Opus, effort Haut + recherche web</td></tr>
+      <tr><td>Code : fonction, correctif / conception d'une application</td><td>Sonnet / Opus</td></tr>
       <tr><td>Analyser, comparer, optimiser, plusieurs angles</td><td>Sonnet ou Opus, effort Haut</td></tr>
-      <tr><td>Concevoir, auditer, stratégie, juridique, sécurité, migration</td><td>Opus, effort Haut</td></tr>
+      <tr><td>Concevoir, auditer, stratégie, pricing, négociation, migration</td><td>Opus, effort Haut</td></tr>
       <tr><td>Exhaustif, multi-dimensions, décision critique</td><td>Opus, effort Max</td></tr>
       <tr><td>Agent autonome, workflow de bout en bout, longue haleine</td><td>Sonnet ou Opus, effort Très haut</td></tr>
       <tr><td>Opus en effort Max ne suffit pas</td><td>Fable 5.1, en recours</td></tr>
       <tr><td>Tâche répétitive / en volume</td><td>On descend d'un cran (coût)</td></tr>
       <tr><td>Très gros document (+100 pages)</td><td>Sonnet ou Opus (pas Haiku)</td></tr>
+      <tr><td>Aucune tâche reconnue</td><td>Sonnet, effort Moyen</td></tr>
     </table>
     <p style="font-size:11.5px;color:var(--soft);line-height:1.55;margin:0 0 14px">
-      L'outil ne compte pas juste des mots-clés : il repère les <b style="color:var(--muted)">négations</b>
-      («&nbsp;sans audit&nbsp;» ne compte pas), classe la tâche par <b style="color:var(--muted)">famille</b>
-      (mécanique / rédaction / analyse / conception), puis module selon la criticité, le volume et la longueur.
+      L'outil repère les <b style="color:var(--muted)">négations</b>
+      ("sans audit" ne compte pas), classe la tâche par <b style="color:var(--muted)">famille</b>
+      (mécanique, rédaction, explication, recherche, conseil, analyse, conception, code), en donnant plus de poids
+      au verbe qui ouvre le prompt. Il pèse ensuite l'<b style="color:var(--muted)">enjeu</b> (santé, argent, droit, sécurité),
+      le besoin personnalisé, la criticité, le volume et la longueur.
+      Haiku n'est conseillé que pour une tâche clairement mécanique et sans enjeu : sans signal clair, l'outil retient Sonnet.
+      Il signale aussi ce qui compte plus que le modèle : activer la recherche web quand l'information change,
+      donner ses critères quand la réponse en dépend, joindre le contenu cité.
       Il situe surtout la tâche sur l'axe <b style="color:var(--muted)">exécution cadrée ↔ jugement</b> :
       le cadré (factuel, règles explicites, résultat vérifiable) se délègue à un modèle léger ;
       le jugement (stratégie, pricing, angle éditorial, arbitrage, décision à conséquences) se garde sur le plus capable,
       parce que c'est là qu'un modèle trop léger produit un travail médiocre sans le signaler.
       L'effort suit les cinq réglages de Claude Code et de l'API : low, medium, high, xhigh et max.
-      Haiku 4.5 n'en a aucun, et Opus 5.5 démarre en medium.
+      Haiku 4.5 n'en a aucun. Opus 5.5 démarre en medium, et Sonnet 5.5 aussi dans Claude Code (en high par l'API).
       <b style="color:var(--fable)">Fable 5.1</b> n'arrive jamais en tête. Anthropic conseille de commencer par Opus 5.5,
       qui fait jeu égal avec Fable sur la plupart des tâches, plus vite et pour 2,5 fois moins cher.
       Fable reste le recours si Opus 5.5 ne suffit pas, même en effort max, et pour un très long travail autonome.
       Les quatre modèles lisent texte, images et PDF. Haiku plafonne à 100 pages par requête ;
       les trois autres ont un contexte d'un million de tokens et montent à 600 pages.
-      <em>Repères tarifaires : docs Anthropic, septembre 2026.</em>
+      <em>Repères tarifaires : docs Anthropic, octobre 2026.</em>
     </p>
   </details>
 
@@ -439,169 +471,273 @@
 </div>
 <script>
 /* ══════════════════════════════════════════════════════════════
-   MOTEUR V3 — analyse de tâche (négations + familles + coût)
+   MOTEUR V4 — intention, enjeu et contexte
 
    Pipeline :
-   1. normalisation + découpage en propositions (scope de négation)
-   2. détection des signaux NON niés, rangés par famille
-   3. classification de la famille dominante  → modèle de base
-   4. modulation : dimensions, criticité, légèreté, volume, doc, longueur
+   1. normalisation ; les motifs se repèrent en début de mot (racine*)
+      ou en mot entier, avec portée de négation
+   2. huit familles d'intention ; le verbe qui ouvre le prompt pèse
+      plus lourd, c'est lui qui dit ce qu'on attend
+   3. enjeu (santé, argent, droit, sécurité, exposition pro), besoin
+      personnalisé, information à jour, pièce citée mais pas jointe
+   4. niveau de modèle (0 Haiku, 1 Sonnet, 2 Opus). Haiku seulement sur
+      preuve d'une tâche mécanique sans enjeu ; sans signal, Sonnet
    5. effort sur un axe séparé (cinq réglages, aucun sur Haiku)
    6. Fable 5.1 signalé en recours, jamais recommandé d'emblée
-   7. estimation de coût (ordre de grandeur) pour les 4 modèles
+   7. points à régler avant de lancer, puis coût pour les 4 modèles
+
+   Le V3 tombait sur Haiku dès qu'aucun mot de sa liste n'apparaissait :
+   « cherche les meilleures mutuelles selon mes besoins » sortait en
+   Haiku. Les cas de référence vivent dans tools/test-model-picker.mjs.
 ══════════════════════════════════════════════════════════════ */
 
-const norm = s => s.toLowerCase().normalize('NFD').replace(/[̀-ͯ]/g,'');
+const norm = s => ' '+s.toLowerCase().normalize('NFD').replace(/[̀-ͯ]/g,'')
+  .replace(/[’'\-]/g,' ').replace(/\s+/g,' ')+' ';
 
-/* Marqueurs de négation — si l'un précède un signal dans la même
-   proposition (fenêtre courte), le signal est ignoré. */
-const NEG = ['sans','pas de','pas d','pas besoin','aucun','aucune','ni ',
+/* Motif : « racine* » = début de mot ; sinon mot ou expression entière */
+const RX = new Map();
+function rx(p){
+  if(!RX.has(p)){
+    const pre = p.endsWith('*');
+    const body = norm(pre ? p.slice(0,-1) : p).trim().replace(/[.*+?^${}()|[\]\\]/g,'\\$&');
+    RX.set(p, new RegExp('(?:^|[^a-z0-9])('+body+')'+(pre ? '' : '(?![a-z0-9])')));
+  }
+  return RX.get(p);
+}
+function find(t, p){ const m = rx(p).exec(t); return m ? m.index + m[0].length - m[1].length : -1; }
+
+/* Négation : un marqueur juste avant le motif, dans la même proposition */
+const NEG = ['sans','pas de','pas d','pas besoin','aucun','aucune','ni',
   'ne pas','inutile de','inutile d','eviter','evite','exclure','exclus',
-  'hors','sauf','plutot que','au lieu de','non '];
+  'hors','sauf','plutot que','au lieu de','non'];
+function isNegated(t, idx){
+  let before = t.slice(Math.max(0, idx-32), idx);
+  const cut = Math.max(...['.',',',';',':','!','?'].map(c => before.lastIndexOf(c)));
+  if(cut !== -1) before = before.slice(cut+1);
+  before = ' '+before;
+  return NEG.some(n => before.includes(' '+n+' '));
+}
+const present = (t, p) => { const i = find(t, p); return i !== -1 && !isNegated(t, i); };
+const anyOf = (t, list) => list.some(p => present(t, p));
 
-/* Signaux — [motif, poids, famille, label]
-   familles : mech · write · analyze · build                              */
-const SIGNALS = [
-  /* BUILD — conception, architecture, stratégie, droit, sécurité */
-  ['architecture',9,'build','architecture'],['architectural',9,'build','architecture'],
-  ['microservices',9,'build','microservices'],['multi-tenant',9,'build','multi-tenant'],
-  ['multi tenant',9,'build','multi-tenant'],['infrastructure',7,'build','infrastructure'],
-  ['systeme distribue',8,'build','distribué'],['refonte',7,'build','refonte'],
-  ['conception',6,'build','conception'],['concois',6,'build','conception'],
-  ['concevoir',6,'build','conception'],['concevez',6,'build','conception'],
-  ['legacy',6,'build','legacy'],['modernisation',6,'build','modernisation'],
-  ['migration',8,'build','migration'],['migrer',7,'build','migration'],
-  ['audit',7,'build','audit'],['auditer',7,'build','audit'],
-  ['strategie',7,'build','stratégie'],['strategique',7,'build','stratégie'],
-  ['roadmap',6,'build','roadmap'],['business plan',8,'build','business plan'],
-  ['positionnement',6,'build','positionnement'],['etude de marche',8,'build','étude de marché'],
-  ['plan de croissance',7,'build','plan de croissance'],
-  ['juridique',9,'build','juridique'],['contrat',8,'build','contrat'],
-  ['contractuel',8,'build','contrat'],['cgv',7,'build','CGV'],
-  ['rgpd',8,'build','RGPD'],['conformite',8,'build','conformité'],
-  ['mentions legales',7,'build','mentions légales'],
-  ['vulnerabilite',8,'build','vulnérabilité'],['pentest',8,'build','pentest'],
-  ['securise',6,'build','sécurisé'],['faille',7,'build','faille'],
-  ['page de vente',7,'build','page de vente'],['landing page',6,'build','landing page'],
-  ['proposition commerciale',7,'build','proposition commerciale'],
-  /* ANALYZE — raisonnement, comparaison, arbitrage */
-  ['analyse concurrentielle',7,'analyze','analyse concurrentielle'],
-  ['analyse strategique',7,'analyze','analyse stratégique'],
-  ['analyse',4,'analyze','analyse'],['analyser',4,'analyze','analyse'],
-  ['evaluer',4,'analyze','évaluation'],['evaluation',4,'analyze','évaluation'],
-  ['synthese',4,'analyze','synthèse'],['comparaison',5,'analyze','comparaison'],
-  ['compare',5,'analyze','comparaison'],['comparer',5,'analyze','comparaison'],
-  ['arbitrage',5,'analyze','arbitrage'],['trade-off',5,'analyze','trade-off'],
-  ['decision',4,'analyze','décision'],['prioriser',4,'analyze','priorisation'],
-  ['priorise',4,'analyze','priorisation'],['recommandation',4,'analyze','recommandation'],
-  ['optimiser',4,'analyze','optimisation'],['optimisation',4,'analyze','optimisation'],
-  ['approfondi',4,'analyze','approfondi'],['approfondie',4,'analyze','approfondi'],
-  ['interpreter',4,'analyze','interprétation'],['diagnostic',5,'analyze','diagnostic'],
-  ['multi-sources',5,'analyze','multi-sources'],['multi sources',5,'analyze','multi-sources'],
-  ['nuance',4,'analyze','nuance'],
-  /* WRITE — production de texte standard */
-  ['copywriting',5,'write','copywriting'],['article',3,'write','article'],
-  ['newsletter',3,'write','newsletter'],['sequence email',4,'write','séquence email'],
-  ['email',2,'write','email'],['mail',2,'write','email'],
-  ['rediger',3,'write','rédaction'],['redige',3,'write','rédaction'],
-  ['redaction',3,'write','rédaction'],['rapport',3,'write','rapport'],
-  ['presentation',2,'write','présentation'],['slides',2,'write','slides'],
-  ['script',2,'write','script'],['post linkedin',2,'write','post LinkedIn'],
-  ['carrousel',2,'write','carrousel'],['fiche de poste',3,'write','fiche de poste'],
-  ['recrutement',3,'write','recrutement'],['onboarding',2,'write','onboarding'],
-  ['brief',2,'write','brief'],['plan ',2,'write','plan'],['outline',2,'write','outline'],
-  /* MECH — transformation mécanique */
-  ['reformule',5,'mech','reformuler'],['reformuler',5,'mech','reformuler'],
-  ['corrige',5,'mech','corriger'],['corriger',5,'mech','corriger'],
-  ['traduis',5,'mech','traduire'],['traduire',5,'mech','traduire'],
-  ['traduction',5,'mech','traduction'],['resume',4,'mech','résumer'],
-  ['resumer',4,'mech','résumer'],['raccourcis',4,'mech','raccourcir'],
-  ['raccourcir',4,'mech','raccourcir'],['lister',3,'mech','lister'],
-  ['extrais',4,'mech','extraire'],['extraire',4,'mech','extraire'],
-  ['renomme',4,'mech','renommer'],['renommer',4,'mech','renommer'],
-  ['formate',4,'mech','formater'],['formater',4,'mech','formater'],
-  ['orthographe',5,'mech','orthographe'],['grammaire',5,'mech','grammaire'],
-  ['snippet',3,'mech','snippet'],['reecris',3,'mech','réécrire'],
-  ['reecrire',3,'mech','réécrire'],['met en forme',4,'mech','mise en forme'],
-  ['classe',3,'mech','classer'],['trier',3,'mech','trier'],
-  ['convertir',4,'mech','convertir'],['nettoie',4,'mech','nettoyer'],
+/* Familles d'intention — [motif, poids, label] */
+const FAMILIES = {
+  mech: [
+    ['corrig*',5,'corriger'],['reformul*',5,'reformuler'],['tradu*',5,'traduire'],
+    ['resum*',5,'résumer'],['extrai*',4,'extraire'],['extract*',4,'extraire'],
+    ['formate',4,'formater'],['formater',4,'formater'],['mise en forme',4,'mise en forme'],
+    ['mets en forme',4,'mise en forme'],['mettre en forme',4,'mise en forme'],
+    ['renomm*',4,'renommer'],['convert*',4,'convertir'],['transcri*',4,'transcrire'],
+    ['orthograph*',5,'orthographe'],['grammair*',5,'grammaire'],['ponctuation',4,'ponctuation'],
+    ['faute*',4,'fautes'],['coquille*',4,'coquilles'],['raccourci*',4,'raccourcir'],
+    ['simplifie',3,'simplifier'],['simplifier',3,'simplifier'],['reecri*',3,'réécrire'],
+    ['paraphras*',4,'paraphraser'],['relis*',3,'relire'],['lister',3,'lister'],
+    ['liste les',3,'lister'],['trie',3,'trier'],['trier',3,'trier'],['classe',3,'classer'],
+    ['classer',3,'classer'],['nettoie*',4,'nettoyer'],['nettoyer',4,'nettoyer'],
+    ['majuscule*',4,'casse'],['minuscule*',4,'casse'],['en tableau',3,'mise en tableau'],
+    ['en puces',3,'mise en liste'],['calcule*',3,'calcul'],['transforme*',3,'transformer'],
+    ['remplis',3,'remplir'],['remplir',3,'remplir'],['recopi*',3,'recopier'],
+  ],
+  write: [
+    ['redig*',5,'rédaction'],['redaction',5,'rédaction'],['ecri*',4,'rédaction'],
+    ['email*',2,'email'],['mail',2,'email'],['mails',2,'email'],['courriel*',2,'email'],
+    ['message*',2,'message'],['lettre*',3,'lettre'],['post',3,'post'],['posts',3,'post'],
+    ['article*',3,'article'],['newsletter*',3,'newsletter'],['bio',3,'bio'],
+    ['biographie',3,'bio'],['slogan*',3,'slogan'],['accroche*',3,'accroche'],
+    ['titre*',2,'titre'],['description*',2,'description'],['fiche produit',3,'fiche produit'],
+    ['fiches produit*',3,'fiche produit'],['discours',3,'discours'],['texte*',1,'texte'],
+    ['cv',3,'CV'],['annonce*',3,'annonce'],['faq',3,'FAQ'],['compte rendu',3,'compte rendu'],
+    ['presentation*',2,'présentation'],['slides',2,'slides'],['carrousel*',2,'carrousel'],
+    ['pitch*',3,'pitch'],['invitation*',2,'invitation'],['relance*',3,'relance'],
+    ['reponds',3,'réponse'],['repondre',3,'réponse'],['reponse*',2,'réponse'],
+    ['genere*',2,'générer'],['script*',2,'script'],['brief*',2,'brief'],
+    ['fiche de poste',3,'fiche de poste'],['outline',2,'plan'],['planifi*',4,'planification'],
+    ['organis*',3,'organisation'],['planning',3,'planning'],['plan de',3,'plan'],
+    ['itineraire*',3,'itinéraire'],['recette*',3,'recette'],['idee*',3,'idées'],
+    ['propose*',3,'propositions'],['imagine*',3,'idées'],['brainstorm*',4,'idées'],
+  ],
+  explain: [
+    ['explique*',4,'expliquer'],['c est quoi',4,'définition'],['qu est ce',4,'définition'],
+    ['definition*',3,'définition'],['defini*',3,'définition'],['comment fonctionne*',4,'fonctionnement'],
+    ['comment marche*',4,'fonctionnement'],['comment ca marche',4,'fonctionnement'],
+    ['apprends moi',4,'apprendre'],['vulgaris*',4,'vulgariser'],['difference entre',3,'différence'],
+    ['signifie',3,'sens'],['veut dire',3,'sens'],['comment faire',3,'méthode'],
+    ['est ce que',2,'question'],
+  ],
+  research: [
+    ['cherch*',5,'recherche'],['recherch*',5,'recherche'],['trouv*',1,'trouver'],
+    ['veille',4,'veille'],['quels sont',3,'recensement'],['quelles sont',3,'recensement'],
+    ['liste des',3,'recensement'],['sources',3,'sources'],['etat de l art',5,'état de l\'art'],
+    ['renseign*',4,'se renseigner'],['benchmark*',5,'benchmark'],['panorama',4,'panorama'],
+    ['tour d horizon',4,'tour d\'horizon'],['comparatif*',4,'comparatif'],
+    ['classement',3,'classement'],['top 3',3,'classement'],['top 5',3,'classement'],
+    ['top 10',3,'classement'],['ou acheter',3,'où acheter'],['fournisseur*',2,'fournisseurs'],
+    ['prestataire*',2,'prestataires'],
+  ],
+  advise: [
+    ['conseil*',5,'conseil'],['recommand*',4,'recommandation'],['choisi*',5,'choix'],
+    ['choix',4,'choix'],['lequel',4,'choix'],['laquelle',4,'choix'],['lesquels',4,'choix'],
+    ['lesquelles',4,'choix'],['dois je',5,'décision'],['faut il',4,'décision'],
+    ['vaut il mieux',5,'décision'],['vaut mieux',5,'décision'],['est ce que je',4,'décision'],
+    ['que faire',4,'décision'],['quoi faire',4,'décision'],['meilleur*',4,'le meilleur'],
+    ['ideal*',3,'l\'idéal'],['le plus adapte',4,'le plus adapté'],['la plus adaptee',4,'le plus adapté'],
+    ['les plus adaptes',4,'le plus adapté'],['decid*',4,'décision'],['decision*',4,'décision'],
+    ['trancher',5,'trancher'],['tranche',5,'trancher'],['arbitr*',5,'arbitrage'],
+    ['ou investir',5,'placement'],['ou placer',5,'placement'],['comment investir',5,'placement'],
+    ['comment placer',5,'placement'],['que choisir',5,'choix'],['acheter',4,'achat'],
+    ['achat',4,'achat'],['prepar*',3,'préparation'],['par ou commencer',5,'démarrage'],
+    ['aide moi a',2,'accompagnement'],
+  ],
+  analyze: [
+    ['analys*',5,'analyse'],['evalu*',4,'évaluation'],['diagnosti*',5,'diagnostic'],
+    ['compar*',5,'comparaison'],['synthe*',4,'synthèse'],['interpret*',4,'interprétation'],
+    ['prioris*',4,'priorisation'],['optimis*',4,'optimisation'],['critiqu*',4,'critique'],
+    ['pourquoi',3,'pourquoi'],['avantages et inconvenients',5,'pour et contre'],
+    ['pour et contre',5,'pour et contre'],['forces et faiblesses',5,'forces et faiblesses'],
+    ['swot',5,'SWOT'],['risque*',3,'risques'],['approfondi*',4,'approfondi'],
+    ['en profondeur',4,'approfondi'],['nuanc*',4,'nuance'],['challenge*',4,'challenger'],
+    ['estime*',3,'estimation'],['chiffr*',3,'chiffrage'],['tendance*',3,'tendances'],
+    ['kpi',3,'KPI'],['statisti*',3,'statistiques'],['multi sources',5,'multi-sources'],
+    ['legal*',4,'légalité'],['illegal*',4,'légalité'],['conforme',4,'conformité'],
+  ],
+  build: [
+    ['concev*',6,'conception'],['concoi*',6,'conception'],['conception',6,'conception'],
+    ['architectur*',8,'architecture'],['strategi*',7,'stratégie'],['plan d action',6,'plan d\'action'],
+    ['business plan',8,'business plan'],['roadmap',6,'roadmap'],['feuille de route',6,'roadmap'],
+    ['audit*',7,'audit'],['refonte',7,'refonte'],['migration*',6,'migration'],['migrer',6,'migration'],
+    ['etude de marche',8,'étude de marché'],['positionnement',6,'positionnement'],
+    ['modele economique',7,'modèle économique'],['business model',7,'modèle économique'],
+    ['pricing',7,'pricing'],['tarification',7,'pricing'],['fixer le prix',7,'pricing'],
+    ['fixer mes prix',7,'pricing'],['fixer mon prix',7,'pricing'],['fixe le prix',7,'pricing'],
+    ['fixe mes prix',7,'pricing'],['fixe mon prix',7,'pricing'],['quel prix',6,'pricing'],
+    ['quel tarif',6,'pricing'],['combien facturer',7,'pricing'],['negoci*',6,'négociation'],['propale*',7,'proposition commerciale'],
+    ['proposition commerciale',7,'proposition commerciale'],['page de vente',7,'page de vente'],
+    ['landing page',6,'landing page'],['microservices',9,'microservices'],['multi tenant',9,'multi-tenant'],
+    ['infrastructure',7,'infrastructure'],['systeme distribue',8,'système distribué'],
+    ['legacy',6,'legacy'],['modernis*',5,'modernisation'],['plan de croissance',7,'plan de croissance'],
+    ['go to market',7,'go-to-market'],['automatis*',4,'automatisation'],['processus',3,'processus'],
+    ['pentest',8,'pentest'],['levee de fonds',7,'levée de fonds'],['plan de formation',4,'plan de formation'],
+  ],
+  code: [
+    ['code',5,'code'],['coder',5,'code'],['codes',5,'code'],['fonction',3,'fonction'],
+    ['fonctions',3,'fonction'],['python',5,'Python'],['javascript',5,'JavaScript'],
+    ['typescript',5,'TypeScript'],['js',4,'JavaScript'],['sql',5,'SQL'],['regex',5,'regex'],
+    ['api',4,'API'],['bug*',5,'bug'],['debug*',6,'débogage'],['debogu*',6,'débogage'],
+    ['refactor*',6,'refactorisation'],['html',4,'HTML'],['css',4,'CSS'],['react',5,'React'],
+    ['composant*',3,'composant'],['formule excel',4,'formule'],['formule sheets',4,'formule'],
+    ['macro*',4,'macro'],['vba',5,'VBA'],['application',3,'application'],['appli',3,'application'],
+    ['app',3,'application'],['base de donnees',4,'base de données'],['erreur*',2,'erreur'],
+    ['tests unitaires',5,'tests'],['test unitaire',5,'tests'],['git',4,'git'],['docker',5,'Docker'],
+    ['deploi*',4,'déploiement'],['n8n',4,'n8n'],['zapier',4,'Zapier'],['webhook*',4,'webhook'],
+  ],
+};
+/* Ordre de priorité en cas d'égalité */
+const ORDER = ['build','advise','analyze','code','research','write','explain','mech'];
+
+/* Enjeu — [motif, domaine]. Les quatre premiers domaines sont « lourds » :
+   une erreur y coûte de l'argent, de la santé ou un litige. */
+const HEAVY = ['santé','argent','droit','sécurité'];
+const STAKES = [
+  ['sante','santé'],['medic*','santé'],['symptom*','santé'],['traitement*','santé'],
+  ['maladi*','santé'],['medecin*','santé'],['docteur','santé'],['hopital','santé'],
+  ['hospitalis*','santé'],['mutuelle*','santé'],['complementaire sante','santé'],
+  ['prevoyance','santé'],['grossesse','santé'],['therap*','santé'],
+  ['assuranc*','argent'],['financ*','argent'],['placement*','argent'],['invest*','argent'],
+  ['bourse','argent'],['crypto*','argent'],['epargn*','argent'],['retraite*','argent'],
+  ['impot*','argent'],['fiscal*','argent'],['declaration de revenus','argent'],
+  ['credit*','argent'],['pret immobilier','argent'],['emprunt*','argent'],['banque*','argent'],
+  ['livret*','argent'],['salaire*','argent'],['tresorerie','argent'],['immobili*','argent'],
+  ['juridi*','droit'],['droit du','droit'],['droit de','droit'],['avocat*','droit'],
+  ['contrat*','droit'],['contractuel*','droit'],['litige*','droit'],['licenci*','droit'],
+  ['prud hom*','droit'],['rgpd','droit'],['cgv','droit'],['cgu','droit'],
+  ['mentions legales','droit'],['conformit*','droit'],['plainte','droit'],['tribunal','droit'],
+  ['bail','droit'],['succession','droit'],['divorce','droit'],['statuts','droit'],
+  ['securit*','sécurité'],['vulnerabilit*','sécurité'],['faille*','sécurité'],
+  ['pentest','sécurité'],['mot de passe','sécurité'],['cyber*','sécurité'],
+  ['en production','exposition'],['en prod','exposition'],['client final','exposition'],
+  ['pour un client','exposition'],['publier','exposition'],['publication','exposition'],
+  ['sous mon nom','exposition'],['recrut*','exposition'],['negoci*','exposition'],
+  ['investisseur*','exposition'],
 ];
 
-/* Dimensions transverses — chacune tire vers analyze/build */
+/* Besoin personnalisé : la réponse dépend de la situation de la personne */
+const PERSONAL = ['mes besoins','mon besoin','ma situation','mon cas','mon profil',
+  'mes criteres','mon budget','pour moi','selon mes','en fonction de mes','adapte a mes',
+  'adaptee a mes','adaptes a mes','ma famille','mon foyer','mes attentes','mes contraintes',
+  'mes gouts','mes envies','a mon cas'];
+/* Information qui change dans le temps : il faut la recherche web */
+const FRESH = ['en ce moment','actuel*','aujourd hui','cette annee','2025','2026','2027',
+  'dernieres','derniers','recent*','prix','tarif*','offres','comparatif*','avis',
+  'classement','top 3','top 5','top 10','nouveaut*','actualit*','du marche','sur le marche',
+  'le moins cher','les moins chers','la moins chere','les moins cheres','promo*','bon plan*',
+  'acheter','achat'];
+/* Pièce citée dans le prompt, qu'il faudra coller ou joindre */
+const ATTACH = ['ce texte','ce document','ce doc','ce pdf','ce fichier','cette image',
+  'cette photo','cette capture','ce mail','cet email','cet e mail','ce message',
+  'ce paragraphe','ce code','ce script','ce contrat','ci joint','en piece jointe',
+  'ce rapport','cette page','ce site','ces donnees','ce tableau','ce tableur','cette liste',
+  'ce cv','cet article','ce post','ces notes','ce compte rendu','ce devis','ce brief'];
+
+/* Dimensions transverses (audit à plusieurs angles) */
 const DIMS = {
   seo:'SEO',referencement:'SEO',ux:'UX',ergonomie:'UX',utilisabilite:'UX',ui:'UI',
-  design:'Design',visuel:'Design',branding:'Branding',identite:'Branding',
-  performance:'Perf',perf:'Perf',vitesse:'Perf',pagespeed:'Perf',cwv:'Perf',
-  accessibilite:'A11y',wcag:'A11y',securite:'Sécurité',contenu:'Contenu',
-  editorial:'Contenu',technique:'Technique',conversion:'Conversion',cro:'Conversion',
-  mobile:'Mobile',responsive:'Mobile',analytics:'Analytics',ga4:'Analytics',
-  copywriting:'Copywriting',architecture:'Architecture',
+  design:'Design',branding:'Branding',performance:'Perf',pagespeed:'Perf',cwv:'Perf',
+  accessibilite:'A11y',wcag:'A11y',securite:'Sécurité',editorial:'Contenu',
+  conversion:'Conversion',cro:'Conversion',mobile:'Mobile',responsive:'Mobile',
+  analytics:'Analytics',ga4:'Analytics',copywriting:'Copywriting',architecture:'Architecture',
 };
 
-/* Criticité — pousse effort + peut bumper le modèle */
+/* Criticité — [motif, poids modèle, poids effort, label] */
 const CRIT = [
-  ['exhaustif',2,3,'exhaustif'],['exhaustive',2,3,'exhaustif'],['complet',1,2,'complet'],
-  ['complete',1,2,'complet'],['critique',1,2,'critique'],['en production',2,3,'en production'],
-  ['en prod',2,3,'en production'],['client final',2,3,'client final'],
-  ['pour un client',1,2,'pour un client'],['irreversible',2,3,'irréversible'],
-  ['sans erreur',2,3,'sans erreur'],['imperativement',1,2,'impérativement'],
-  ['enjeu',1,2,'enjeu'],['version finale',1,2,'finale'],['rien rater',2,3,'rien à rater'],
-  ['rien oublier',2,3,'rien à oublier'],['en detail',1,2,'en détail'],
+  ['exhaustif*',2,3,'exhaustif'],['complet',1,2,'complet'],['complete',1,2,'complet'],
+  ['crucial*',1,2,'crucial'],['tres important*',1,2,'très important'],
+  ['en production',2,3,'en production'],['en prod',2,3,'en production'],
+  ['client final',2,3,'client final'],['pour un client',1,2,'pour un client'],
+  ['irreversible*',2,3,'irréversible'],['sans erreur',2,3,'sans erreur'],
+  ['imperativement',1,2,'impérativement'],['enjeu*',1,2,'enjeu'],['version finale',1,2,'finale'],
+  ['rien rater',2,3,'rien à rater'],['rien oublier',2,3,'rien à oublier'],
+  ['rien laisser',2,3,'rien à laisser'],['en detail',1,2,'en détail'],
   ['le plus possible',1,2,'au max'],['tous les',1,1,'exhaustif'],['chaque',1,1,'chaque cas'],
 ];
-
 /* Légèreté — tire vers le bas */
 const LIGHT = [
-  ['juste',3,2,'juste'],['rapidement',3,2,'rapidement'],['vite',2,2,'vite'],
-  ['simple',2,1,'simple'],['basique',3,2,'basique'],['rapide',2,2,'rapide'],
-  ['en 5 min',3,2,'5 min'],['en 2 min',4,2,'2 min'],['un petit',2,1,'petit'],
-  ['pour tester',2,1,'test'],['juste pour voir',3,2,'test rapide'],
-  ['brouillon',2,1,'brouillon'],['premiere version',2,1,'v1'],['draft',2,1,'draft'],
+  ['juste un',3,2,'juste'],['juste une',3,2,'juste'],['juste des',3,2,'juste'],
+  ['juste pour',3,2,'juste'],['juste le',3,2,'juste'],['juste la',3,2,'juste'],
+  ['rapidement',3,2,'rapidement'],['vite',2,2,'vite'],['simple',2,1,'simple'],
+  ['basique',3,2,'basique'],['rapide',2,2,'rapide'],['en 5 min',3,2,'5 min'],
+  ['en 2 min',4,2,'2 min'],['un petit',2,1,'petit'],['une petite',2,1,'petit'],
+  ['pour tester',2,1,'test'],['brouillon',2,1,'brouillon'],['premiere version',2,1,'v1'],
+  ['draft',2,1,'draft'],
 ];
-
 /* Volume — tâches répétitives : on privilégie le moins cher */
-const VOLUME = ['en masse','en lot','batch','x10','x100','des dizaines',
-  'des centaines','en serie','repetitif','en volume','a la chaine','chacun'];
-
-/* Verbes de transformation — intention « je transforme un contenu existant ».
-   S'ils sont présents, un nom-sujet lourd (« contrat », « juridique ») est
-   l'OBJET de la tâche, pas une demande de création : l'intention prime. */
-const TRANSFORM = ['traduis','traduire','resume','resumer','reformule','reformuler',
-  'corrige','corriger','extrais','extraire','raccourcis','raccourcir','formate','formater'];
-
-/* Nature de la tâche — axe « exécution cadrée ↔ jugement ».
-   Reprend la règle de bascule de modèle de la méthodo de passation :
-   le cadré (factuel, règles explicites) se délègue à un modèle léger ;
-   le jugement (stratégie, pricing, angle, arbitrage, décision) exige le
-   plus capable, sinon travail médiocre livré sans que le modèle le signale. */
-const JUDGE = ['strategie','strategique','pricing','tarification','fixer le prix',
-  'angle','ligne editoriale','ton juste','trancher','arbitr','diagnostic',
-  'positionnement','negociation','convaincre','persuader','decision','delicat',
-  'sensible','publier','en public','page de vente','argumentaire','nuance',
-  'conseil','recommand','enjeu','subtil','jugement'];
-const FRAMED = ['selon le modele','selon le template','d apres','a partir du modele',
-  'en suivant','remplir','recopier','appliquer','gabarit','format impose',
-  'consignes','cadre','recense','recenser','extraire','convertir','liste des'];
-
-/* Agentique au long cours : travail multi-étapes autonome, de bout en
-   bout, sans supervision. Pousse l'effort en xhigh (l'usage qu'Anthropic
-   lui réserve) et, sur Opus, fait signaler Fable 5.1 en recours. */
+const VOLUME = ['en masse','en lot','batch','x10','x100','des dizaines','des centaines',
+  'en serie','repetiti*','en volume','a la chaine','chacun*','pour chaque'];
+/* Travail autonome au long cours : effort xhigh, Fable en recours sur Opus */
 const AGENTIC = ['agent autonome','agentique','en autonomie','de bout en bout',
-  'end-to-end','sans supervision','multi-etapes','multi etapes','longue haleine',
-  'sur plusieurs jours','workflow complet','orchestre','orchestrer','pipeline complet'];
-
+  'end to end','sans supervision','multi etapes','longue haleine','sur plusieurs jours',
+  'workflow complet','orchestre*','pipeline complet','un agent'];
 /* Lecture de contenu */
-const DOCREAD = ['pdf','document','fichier','piece jointe','ci-joint','ci joint',
-  'image','photo','capture','screenshot','scan','ce rapport','le rapport',
-  'cette image','ce fichier','ce doc','diapositive'];
+const DOCREAD = ['pdf','document*','fichier*','piece jointe','ci joint','image*','photo*',
+  'capture*','screenshot','scan','rapport','diapositive*'];
 const BIGDOC = ['gros pdf','gros document','long document','document volumineux',
   'volumineux','centaines de pages','tout le document','tout le rapport',
   'plusieurs documents','plusieurs pdf','rapport entier','livre entier'];
 
-/* Tarifs $/million de tokens (docs Anthropic, septembre 2026 :
-   Haiku 4.5, Sonnet 5, Opus 5.5, Fable 5.1). Le tarif de lancement de
-   Sonnet 5 (2/10) est devenu son prix standard : la hausse à 3/15 prévue
-   au 1er septembre 2026 n'a pas eu lieu. */
+/* Axe « exécution cadrée ↔ jugement » : le cadré se délègue à un modèle
+   léger, le jugement exige le plus capable, sinon travail médiocre livré
+   sans que le modèle le signale. */
+const JUDGE = ['strategi*','pricing','tarification','fixer le prix','angle','ligne editoriale',
+  'ton juste','tranch*','arbitr*','diagnosti*','positionnement','negoci*','convaincre',
+  'persuad*','decid*','decision*','delicat*','sensible*','publier','en public','page de vente',
+  'argumentaire','nuanc*','conseil*','recommand*','enjeu*','subtil*','jugement','choisi*',
+  'meilleur*','dois je','vaut il mieux','faut il','mecontent*','conflit*','reclamation*'];
+const FRAMED = ['selon le modele','selon le template','d apres','a partir du modele',
+  'en suivant','rempli*','recopi*','appliqu*','gabarit','format impose','consignes',
+  'recense*','extrai*','convert*','au format','mot pour mot','sans rien changer'];
+
+/* Tarifs $/million de tokens (docs Anthropic, vérifiés le 1er octobre
+   2026 : Haiku 4.5, Sonnet 5.5, Opus 5.5, Fable 5.1). Sonnet 5.5, sorti
+   le 28 septembre 2026, garde le prix de Sonnet 5 (2/10). */
 const PRICE = {
   Haiku : {in:1,  out:5},
   Sonnet: {in:2,  out:10},
@@ -629,194 +765,203 @@ function fmtX(v){
   return String(Math.round(v*10)/10).replace('.', ',');
 }
 
-/* ── Détection de négation dans une fenêtre avant le signal ── */
-function isNegated(text, idx){
-  const before = text.slice(Math.max(0, idx-32), idx);
-  return NEG.some(n => before.includes(' '+n) || before.startsWith(n));
-}
-/* Le motif figure dans le texte normalisé, sans négation devant */
-function present(text, w){
-  const idx = text.indexOf(norm(w));
-  return idx !== -1 && !isNegated(text, idx);
-}
-/* Cumule les poids d'une liste [motif, poids modèle, poids effort, label]
-   (criticité ou légèreté) ; un même label ne compte qu'une fois */
-function weigh(text, list, hits){
+/* Cumule les poids d'une liste [motif, poids modèle, poids effort, label] ;
+   un même label ne compte qu'une fois */
+function weigh(t, list, hits){
   let m = 0, e = 0;
-  for(const [w,pm,pe,lbl] of list){
-    if(present(text, w) && !hits.includes(lbl)){ m += pm; e += pe; hits.push(lbl); }
+  for(const [p,pm,pe,lbl] of list){
+    if(present(t, p) && !hits.includes(lbl)){ m += pm; e += pe; hits.push(lbl); }
   }
   return {m, e};
 }
 
+/* Ce qu'il faut donner au modèle quand le prompt parle de « mes besoins » */
+function contextHint(t, domains){
+  if(anyOf(t, ['mutuelle*','complementaire sante','prevoyance']))
+    return 'votre âge, qui doit être couvert (vous seul, couple, enfants), les soins qui comptent pour vous (optique, dentaire, hospitalisation, médecines douces) et le budget mensuel';
+  if(domains.includes('santé')) return 'votre âge, vos traitements en cours et ce que vous cherchez à savoir';
+  if(domains.includes('argent')) return 'le montant, la durée, ce que vous acceptez de risquer et votre situation fiscale';
+  if(domains.includes('droit')) return 'le pays, les dates, les documents en jeu et ce que vous voulez obtenir';
+  return 'vos critères, votre budget, vos contraintes et ce que vous avez déjà écarté';
+}
+
 /* ── Moteur principal ── */
 function analyze(raw){
-  const t = ' '+norm(raw)+' ';
+  const t = norm(raw);
   const words = (raw.trim().match(/\S+/g)||[]).length;
+  const LV = ['Haiku','Sonnet','Opus'];
 
-  const fam = {mech:0, write:0, analyze:0, build:0};
-  const hit = {build:[], analyze:[], write:[], mech:[], crit:[], light:[], volume:[], dims:[], neg:[], doc:null};
-  const usedS = new Set();
-
-  for(const [w,pts,f,lbl] of SIGNALS){
-    const key = norm(w);
-    const idx = t.indexOf(key);
-    if(idx === -1) continue;
-    if(isNegated(t, idx)){ if(!hit.neg.includes(lbl)) hit.neg.push(lbl); continue; }
-    if(usedS.has(lbl)) continue;
-    usedS.add(lbl);
-    fam[f] += pts;
-    hit[f].push(lbl);
+  /* 1-2. Familles, verbe d'ouverture */
+  const fam = {}, hit = {neg:[], crit:[], light:[], volume:[], dims:[], stakes:[], doc:null};
+  let lead = null, leadIdx = Infinity;
+  for(const f of ORDER){
+    fam[f] = 0; hit[f] = [];
+    for(const [p,w,lbl] of FAMILIES[f]){
+      const i = find(t, p);
+      if(i === -1) continue;
+      if(isNegated(t, i)){ if(!hit.neg.includes(lbl)) hit.neg.push(lbl); continue; }
+      if(hit[f].includes(lbl)) continue;
+      fam[f] += w; hit[f].push(lbl);
+      if(w >= 3 && i < leadIdx){ leadIdx = i; lead = f; }
+    }
   }
+  // le premier verbe fort compte double s'il ouvre le prompt (4 premiers mots)
+  const fourth = t.split(' ').slice(0,5).join(' ').length;
+  if(lead && leadIdx <= fourth) fam[lead] += 3;
+  // une question courte sans autre signal se lit comme une demande d'explication
+  if(/\?\s*$/.test(raw.trim())) fam.explain += 2;
 
-  // Dimensions
+  // Dimensions transverses
   const seenD = new Set();
   for(const k in DIMS){
-    const d = DIMS[k];
-    if(seenD.has(d)) continue;
-    const re = new RegExp('(^|[^a-z])'+norm(k)+'([^a-z]|$)');
-    if(re.test(t)){ seenD.add(d); hit.dims.push(d); }
+    if(!seenD.has(DIMS[k]) && find(t, k) !== -1){ seenD.add(DIMS[k]); hit.dims.push(DIMS[k]); }
   }
-  // les dimensions renforcent l'analyse (croisement de sujets)
-  fam.analyze += hit.dims.length * 4;
+  if(hit.dims.length >= 2) fam.analyze += hit.dims.length * 3;
   if(hit.dims.length >= 3) fam.build += 4;
 
-  // Criticité / légèreté
+  let family = 'none', best = 0;
+  for(const f of ORDER){ if(fam[f] > best){ best = fam[f]; family = f; } }
+
+  /* 3. Enjeu, besoin personnalisé, fraîcheur, pièce citée */
+  for(const [p,d] of STAKES){ if(present(t, p) && !hit.stakes.includes(d)) hit.stakes.push(d); }
+  const heavy = hit.stakes.filter(d => HEAVY.includes(d));
+  const personal = anyOf(t, PERSONAL);
+  const contextGiven = words >= 30 || /\d/.test(raw) || raw.includes(':');
+  const needsWeb = fam.research - (lead==='research' ? 3 : 0) >= 4
+    || anyOf(t, FRESH) || (present(t, 'meilleur*') && heavy.length > 0);
+  const attachRef = words < 25 && anyOf(t, ATTACH);
+  // Claude ne produit pas d'images : il écrit le prompt d'un outil d'image, ou du SVG
+  const imageGen = anyOf(t, ['dessine*','genere une image','cree une image','fais moi une image',
+    'genere une illustration','cree un logo','genere un logo','genere une photo']);
+
   const {m:critM,  e:critE}  = weigh(t, CRIT,  hit.crit);
   const {m:lightM, e:lightE} = weigh(t, LIGHT, hit.light);
-  // Volume
-  for(const w of VOLUME){ if(t.includes(norm(w)) && !hit.volume.includes(w)) hit.volume.push(w); }
-
-  // Lecture doc
-  const docRead = DOCREAD.some(w=>t.includes(norm(w)));
-  let bigDoc  = BIGDOC.some(w=>t.includes(norm(w)));
-  const mPages = t.match(/(\d{2,4})\s*pages?/);
+  for(const w of VOLUME){ if(present(t, w) && !hit.volume.includes(w.replace('*',''))) hit.volume.push(w.replace('*','')); }
+  const agentic = anyOf(t, AGENTIC);
+  const docRead = anyOf(t, DOCREAD);
+  let bigDoc = anyOf(t, BIGDOC);
+  const mPages = t.match(/(\d{2,4}) ?pages?/);
   if(mPages && parseInt(mPages[1],10) >= 100) bigDoc = true;
   if(docRead) hit.doc = bigDoc ? 'gros document' : 'lecture document';
+  const debug = hit.code.some(l => ['bug','débogage','refactorisation'].includes(l));
 
-  // Intention de transformation (verbe) — prime sur un nom-sujet lourd
-  const transformIntent = TRANSFORM.some(w => present(t, w));
-  // Travail autonome au long cours (liste AGENTIC)
-  const agentic = AGENTIC.some(w => present(t, w));
-
-  /* ── Arbre de décision : famille dominante ── */
-  const order = ['build','analyze','write','mech'];
-  let family = 'none', best = 0;
-  for(const f of order){ if(fam[f] > best){ best = fam[f]; family = f; } }
-
-  // Aucun signal fort → on devine par la structure
-  if(family === 'none'){
-    // un agent autonome sans autre signal n'est pas une tâche courte et bornée
-    if(agentic || words >= 40) family = 'analyze';
-    else if(words >= 14) family = 'write';
-    else family = 'mech';
-  }
-
-  // Verbe de transformation sur un objet expert (« traduis ce contrat ») :
-  // c'est une transformation, pas une création → on recadre en mécanique,
-  // mais on retient que le contenu est dense (plancher Sonnet plus bas).
-  let richTransform=false;
-  if(transformIntent && (family==='build' || family==='analyze')){ family='mech'; richTransform=true; }
-
-  // Modèle de base par famille
-  let model = ({mech:'Haiku', write:'Sonnet', analyze:'Sonnet', build:'Opus'})[family];
-
-  // Modulations
+  /* 4. Niveau de modèle */
   const bumps = [];
-  // analyze → Opus si sujet lourd
-  if(family==='analyze' && (hit.dims.length>=2 || best>=10 || critM>=2)){ model='Opus'; bumps.push('sujet à croiser'); }
-  // criticité forte peut monter d'un cran
-  if(critM>=3 && model==='Sonnet'){ model='Opus'; bumps.push('enjeu critique'); }
-  // légèreté forte redescend d'un cran (sauf criticité)
-  if((lightM>=4) && critM===0){
-    if(model==='Opus'){ model='Sonnet'; bumps.push('tâche allégée'); }
-    else if(model==='Sonnet' && family!=='write'){ model='Haiku'; bumps.push('tâche allégée'); }
-  }
-  // volume → un cran moins cher, sauf criticité
-  if(hit.volume.length && critM===0){
-    if(model==='Opus'){ model='Sonnet'; bumps.push('volume (un cran moins cher)'); }
-    else if(model==='Sonnet'){ model='Haiku'; bumps.push('volume (un cran moins cher)'); }
-  }
-  // transformation d'un contenu expert → plancher Sonnet (nuance à préserver)
-  if(richTransform && model==='Haiku'){ model='Sonnet'; bumps.push('contenu expert à préserver'); }
+  let lvl = ({mech:0, explain:1, write:1, research:1, code:1, analyze:1, advise:1, build:2, none:1})[family];
+  const up = (to, why) => { if(lvl < to){ lvl = to; bumps.push(why); } };
+  const enjeu = heavy.length ? 'enjeu '+heavy.join(' et ') : '';
 
-  /* ── Nature : exécution cadrée ↔ jugement ── */
-  const jHits = JUDGE.filter(w => present(t, w)).length;
-  const fHits = FRAMED.filter(w => present(t, w)).length;
-  const judgeW  = fam.build*1.0 + fam.analyze*0.8 + critM*1.5 + jHits*4 + hit.dims.length*1.5 + 1;
-  const framedW = fam.mech*1.0 + fam.write*0.4 + lightM*1.2 + hit.volume.length*3 + fHits*3 + (transformIntent?3:0) + 1;
+  if(family === 'mech' && heavy.length) up(1, 'contenu sensible à préserver');
+  if(family === 'advise' && (heavy.length || personal || critM >= 2)) up(2, enjeu || 'choix personnalisé');
+  if(family === 'research' && heavy.length && (fam.advise || personal)) up(2, enjeu+', choix personnalisé');
+  if(family === 'analyze' && (hit.dims.length >= 2 || best >= 12 || critM >= 2 || heavy.length || fam.advise >= 4))
+    up(2, heavy.length ? enjeu : hit.dims.length >= 2 ? 'sujet à croiser' : 'raisonnement exigeant');
+  if(family === 'write' && heavy.includes('droit')) up(2, 'rédaction juridique');
+  if(family === 'write' && heavy.length && critM >= 2) up(2, enjeu+', enjeu critique');
+  if(family === 'code' && (fam.build >= 6 || critM >= 2 || words > 40)) up(2, fam.build >= 6 ? 'conception logicielle' : 'code exigeant');
+  if(critM >= 3 && family !== 'mech') up(2, 'enjeu critique');
+
+  // légèreté et volume font descendre, jamais sur un sujet lourd
+  const floor = (family === 'advise' || family === 'build' || family === 'analyze' || family === 'research') ? 1 : 0;
+  if(lightM >= 4 && critM === 0 && !heavy.length){
+    const to = Math.max(family === 'write' ? 1 : floor, lvl-1);
+    if(to < lvl){ lvl = to; bumps.push('tâche allégée'); }
+  }
+  if(hit.volume.length && critM === 0 && !heavy.length){
+    const to = Math.max(floor, lvl-1);
+    if(to < lvl){ lvl = to; bumps.push('volume (un cran moins cher)'); }
+  }
+
+  /* Nature : exécution cadrée ↔ jugement */
+  const jHits = JUDGE.filter(p => present(t, p)).length;
+  const fHits = FRAMED.filter(p => present(t, p)).length;
+  const judgeW  = fam.build + fam.advise + fam.analyze*0.7 + fam.research*0.3 + critM*1.5
+    + jHits*3 + hit.dims.length*1.5 + heavy.length*5 + (personal?3:0) + 1;
+  const framedW = fam.mech + fam.write*0.4 + fam.explain*0.5 + fam.code*0.3 + lightM*1.2
+    + hit.volume.length*3 + fHits*3 + 1;
   const naturePct = Math.max(6, Math.min(94, Math.round(judgeW/(judgeW+framedW)*100)));
   let natLabel, natRule;
   if(naturePct>=63){
     natLabel='Jugement';
-    natRule=`Terrain de <b>jugement</b> : stratégie, arbitrage, écriture publique ou décision à conséquences. C'est là qu'un modèle trop léger rend un travail médiocre <b>sans le signaler</b>. On ne descend pas le modèle ici.`;
+    natRule=`Terrain de <b>jugement</b> : choix, stratégie, arbitrage, écriture publique ou décision à conséquences. C'est là qu'un modèle trop léger rend un travail médiocre <b>sans le signaler</b>. On ne descend pas le modèle ici.`;
   } else if(naturePct<=37){
     natLabel='Exécution cadrée';
-    natRule=`<b>Exécution cadrée</b> : règles explicites, résultat vérifiable. Un modèle léger suffit : le surdimensionner ne rend pas la tâche meilleure, seulement plus chère.`;
+    natRule=`<b>Exécution cadrée</b> : règles explicites, résultat vérifiable. Un modèle léger suffit : le surdimensionner rend seulement la tâche plus chère.`;
   } else {
     natLabel='Mixte';
     natRule=`Zone <b>mixte</b> : une part cadrée, une part de jugement. Découpez la tâche : déléguez le mécanique à un modèle léger, gardez la partie sensible sur le plus capable.`;
   }
   const nature = {pct:naturePct, label:natLabel, rule:natRule};
 
-  // Le jugement interdit de rétrograder trop bas (sauf simple transformation)
-  if(naturePct>=63 && model==='Haiku' && !richTransform && !bigDoc){
-    model='Sonnet'; bumps.push('terrain de jugement');
-  }
+  if(naturePct >= 63 && lvl === 0) up(1, 'terrain de jugement');
+  // jugement net : on garde le plus capable, sauf simple question factuelle
+  const factual = (family === 'research' || family === 'explain' || family === 'none') && !personal && !fam.advise;
+  if(naturePct >= 75 && !factual && (heavy.length || hit.stakes.includes('exposition') || personal || jHits >= 2))
+    up(2, 'terrain de jugement');
+  let forcedFromHaiku = false;
+  if(bigDoc && lvl === 0){ lvl = 1; forcedFromHaiku = true; }
+  const model = LV[lvl];
 
-  // gros doc exclut Haiku
-  let forcedFromHaiku=false;
-  if(bigDoc && model==='Haiku'){ model='Sonnet'; forcedFromHaiku=true; }
-
-  /* ── Effort (axe séparé) ──
-     Les cinq réglages de l'API et de Claude Code (low, medium, high,
-     xhigh, max). Haiku 4.5 n'a pas de réglage d'effort. */
-  let es = ({mech:0, write:1, analyze:2, build:3})[family];
+  /* 5. Effort (axe séparé) : low, medium, high, xhigh, max */
+  let es = ({mech:0, explain:0, write:1, research:1, code:1, analyze:2, advise:1, build:2, none:1})[family];
   es += critE - lightE;
-  if(hit.dims.length>=2) es += 1;
-  if(hit.dims.length>=3) es += 1;
-  if(words>30) es += 1;
+  if(heavy.length) es += 1;
+  if((family === 'research' || family === 'advise') && (personal || (family === 'research' && fam.advise))) es += 1;
+  if(hit.dims.length >= 2) es += 1;
+  if(hit.dims.length >= 3) es += 1;
+  if(words > 40) es += 1;
   if(bigDoc) es += 1;
-  if(richTransform) es = Math.max(es, 2); // contenu dense → au moins Haut
+  if(debug) es += 1;
+  if(family === 'mech' && lvl >= 1) es = Math.max(es, 2);
+  if(lvl === 2) es = Math.max(es, 2);
   es = Math.max(0, es);
-  let effort = es===0 ? 'Bas' : es===1 ? 'Moyen' : es<6 ? 'Haut' : 'Max';
-  // travail autonome au long cours : xhigh, l'usage qu'Anthropic lui réserve
-  if(agentic && effort==='Haut') effort='Très haut';
-  if(model==='Haiku') effort='Sans réglage';
+  let effort = es === 0 ? 'Bas' : es === 1 ? 'Moyen' : es <= 4 ? 'Haut' : critE >= 2 ? 'Max' : 'Très haut';
+  if(agentic && (effort === 'Haut' || effort === 'Moyen')) effort = 'Très haut';
+  if(model === 'Haiku') effort = 'Sans réglage';
 
-  /* ── Fable 5.1 : un recours, jamais une recommandation d'emblée ──
-     Opus 5.5 fait jeu égal avec Fable 5.1 sur la plupart des tâches pour
-     2,5× moins cher, et Anthropic conseille de commencer par lui. Sur les
-     deux terrains de Fable (agentique au long cours, extrême du jugement
-     critique), l'outil garde Opus et signale Fable en recours. */
-  const recours = model!=='Opus' ? ''
+  /* 6. Fable 5.1 : un recours, jamais une recommandation d'emblée */
+  const recours = model !== 'Opus' ? ''
     : agentic ? 'agentique'
-    : (critM>=3 && (naturePct>=70 || hit.dims.length>=3)) ? 'critique' : '';
+    : (critM >= 3 && (naturePct >= 70 || hit.dims.length >= 3)) ? 'critique' : '';
 
-  /* ── Justification ── */
-  const FAMLBL = {mech:'transformation mécanique', write:'rédaction standard',
-                  analyze:'analyse / raisonnement', build:'conception / expertise'};
+  /* Justification */
+  const FAMLBL = {mech:'transformation mécanique', write:'rédaction', explain:'explication',
+    research:'recherche d\'information', advise:'conseil ou choix', analyze:'analyse',
+    build:'conception ou stratégie', code:'code', none:'tâche non reconnue'};
   let why;
   if(forcedFromHaiku) why = 'gros document, trop long pour Haiku';
-  else if(family==='build') why = hit.build[0] || 'tâche de conception';
-  else if(family==='analyze' && hit.dims.length>=2) why = `${hit.dims.length} dimensions à croiser`;
-  else if(family==='analyze') why = hit.analyze[0] || 'raisonnement demandé';
-  else if(family==='write') why = hit.write[0] || 'production de texte';
-  else why = hit.light.length ? `tâche allégée, «&nbsp;${hit.light[0]}&nbsp;»` : (hit.mech[0] || 'tâche courte et bornée');
+  else if(family === 'analyze' && hit.dims.length >= 2) why = `${hit.dims.length} dimensions à croiser`;
+  else if(family === 'none') why = 'aucun verbe de tâche repéré';
+  else why = hit[family][0] || FAMLBL[family];
 
-  /* ── Coûts ── */
+  /* 7. Avant de lancer */
+  const prep = [];
+  if(family === 'none')
+    prep.push(`Je n'ai pas repéré ce que vous attendez (rechercher, rédiger, analyser, choisir...). Par défaut, Sonnet couvre la plupart des cas. Commencez le prompt par le verbe de la tâche pour une recommandation plus juste.`);
+  if(needsWeb)
+    prep.push(`<b>Activez la recherche web.</b> Offres, prix et classements changent ; sans recherche, le modèle répond de mémoire, avec des informations qui datent de sa date de coupure.`);
+  if(personal && !contextGiven)
+    prep.push(`<b>Donnez vos besoins dans le prompt</b> : ${contextHint(t, heavy)}. Sans eux, la réponse reste générique, et ça compte plus que le choix du modèle.`);
+  if(imageGen)
+    prep.push(`<b>Claude ne génère pas d'images</b> (photos, illustrations). Il peut écrire le prompt pour un outil d'image, ou dessiner un schéma simple en SVG.`);
+  if(attachRef)
+    prep.push(`<b>Collez ou joignez le contenu</b> dont parle le prompt : sans lui, le modèle invente.`);
+  if(heavy.length && (family === 'advise' || family === 'research' || family === 'analyze' || family === 'explain' || family === 'none'))
+    prep.push(`Sujet à conséquences (${heavy.join(', ')}) : demandez les sources et vérifiez les chiffres clés avant de décider. Un bon modèle se trompe aussi, avec assurance.`);
+
+  /* Coûts */
   const tk = nominalTokens(words, bigDoc);
   const costs = Object.fromEntries(Object.keys(PRICE).map(m => [m, costPer1000(m, tk)]));
 
-  // Note capacité
-  let note='';
+  let note = '';
   if(docRead && bigDoc)
-    note=`Gros document détecté. Tous les modèles lisent les PDF, mais <b>Haiku plafonne à 100 pages</b> par requête. Sonnet 5, Opus 5.5 et Fable 5.1 ont un contexte d'un million de tokens et lisent jusqu'à 600 pages : des rapports entiers passent en une requête.`;
+    note=`Gros document détecté. Tous les modèles lisent les PDF, mais <b>Haiku plafonne à 100 pages</b> par requête. Sonnet 5.5, Opus 5.5 et Fable 5.1 ont un contexte d'un million de tokens et lisent jusqu'à 600 pages : des rapports entiers passent en une requête.`;
   else if(docRead)
     note=`Haiku, Sonnet, Opus et Fable lisent <b>tous</b> texte, images et PDF. Seule différence : la capacité (Haiku plafonne à 100 pages, les trois autres ont un contexte d'un million de tokens).`;
 
-  return {model, effort, why, family, famLabel:FAMLBL[family]||'tâche', fam, best, es,
-          hit, dims:[...seenD], bumps, note, costs, tk, bigDoc, forcedFromHaiku, nature, recours};
+  return {model, effort, why, family, famLabel:FAMLBL[family], fam, best, es, lvl,
+          hit, dims:[...seenD], bumps, note, prep, needsWeb, personal, heavy,
+          costs, tk, bigDoc, forcedFromHaiku, nature, recours};
 }
 
 /* ── Méta ── Fable n'est jamais recommandé : il n'a qu'une couleur, pour sa barre de coût */
@@ -836,6 +981,9 @@ const E = {
   Max:           {c:'var(--max)',   api:'max',    desc:'Exhaustif. Ne rien rater.'},
 };
 
+const SCORELBL = {build:'conception', advise:'conseil', analyze:'analyse', code:'code',
+  research:'recherche', write:'rédaction', explain:'explication', mech:'mécanique'};
+
 let prevResult=null;
 
 /* ── Rendu mode simple ── */
@@ -846,9 +994,11 @@ function render(r){
 
   const chips=[];
   r.dims.forEach(d      => chips.push(`<span class="chip c-dim">dim : <b>${d}</b></span>`));
-  r.hit.build.forEach(w => chips.push(`<span class="chip c-opus"><b>${w}</b></span>`));
-  r.hit.analyze.forEach(w=>chips.push(`<span class="chip c-medium"><b>${w}</b></span>`));
-  r.hit.write.forEach(w => chips.push(`<span class="chip c-medium"><b>${w}</b></span>`));
+  ['build','advise'].forEach(f => r.hit[f].forEach(w => chips.push(`<span class="chip c-opus"><b>${w}</b></span>`)));
+  ['analyze','research','code','write','explain'].forEach(f => r.hit[f].forEach(w => chips.push(`<span class="chip c-medium"><b>${w}</b></span>`)));
+  r.hit.stakes.forEach(w=> chips.push(`<span class="chip c-crit">enjeu : <b>${w}</b></span>`));
+  if(r.personal) chips.push(`<span class="chip c-dim"><b>besoin personnalisé</b></span>`);
+  if(r.needsWeb) chips.push(`<span class="chip c-doc"><b>info à jour</b></span>`);
   r.hit.crit.forEach(w  => chips.push(`<span class="chip c-crit">⬆ <b>${w}</b></span>`));
   r.hit.mech.forEach(w  => chips.push(`<span class="chip c-haiku"><b>${w}</b></span>`));
   r.hit.light.forEach(w => chips.push(`<span class="chip c-light">⬇ <b>${w}</b></span>`));
@@ -858,15 +1008,24 @@ function render(r){
 
   // « Exhaustif. Ne rien rater. » devient « exhaustif, ne rien rater » dans la phrase
   const efTxt = ef.desc.replace(/\.\s+(\S)/g, (_,c)=>', '+c.toLowerCase()).replace(/\.$/,'');
-  let rationale = `Tâche classée <b>${r.famLabel}</b> (${r.why}), donc <b>${r.model}</b>. `
+  let rationale = (r.family === 'none'
+      ? `Tâche non reconnue, donc <b>Sonnet</b> par défaut. `
+      : `Tâche lue comme <b>${r.famLabel}</b> (${r.why}), donc <b>${r.model}</b>. `)
     + (r.model==='Haiku' ? `Pas de réglage d'effort sur Haiku 4.5.`
                          : `Effort <b>${r.effort}</b> : ${efTxt.charAt(0).toLowerCase()+efTxt.slice(1)}.`);
   if(r.bumps.length) rationale += ` Ajusté : ${r.bumps.join(', ')}.`;
 
-  // Opus 5.5 démarre en medium : on le dit dès que l'outil conseille plus haut
-  const noteOpus = (r.model==='Opus' && ['Haut','Très haut','Max'].includes(r.effort))
-    ? `<div class="note n-effort"><b>Opus 5.5 démarre en effort moyen</b> (réglage d'usine). Passez-le sur «&nbsp;${ef.api}&nbsp;» avant de lancer, sinon il travaille en dessous de ce que la tâche demande.</div>`
-    : '';
+  // Opus 5.5 démarre en medium partout, Sonnet 5.5 dans Claude Code :
+  // on le dit dès que l'outil conseille plus haut
+  const aboveMedium = ['Haut','Très haut','Max'].includes(r.effort);
+  const prep = [];
+  if(aboveMedium && r.model==='Opus')
+    prep.push(`<b>Opus 5.5 démarre en effort moyen</b> (réglage d'usine). Passez-le sur "${ef.api}", sinon il travaille en dessous de ce que la tâche demande.`);
+  if(aboveMedium && r.model==='Sonnet')
+    prep.push(`<b>Dans Claude Code, Sonnet 5.5 démarre en effort moyen</b> (en high par l'API). Passez-le sur "${ef.api}", sinon il travaille en dessous de ce que la tâche demande.`);
+  prep.push(...r.prep);
+  const prepBlock = !prep.length ? ''
+    : `<div class="prep"><div class="t">Avant de lancer</div><ul>${prep.map(x => `<li>${x}</li>`).join('')}</ul></div>`;
   const noteFable = !r.recours ? ''
     : `<div class="note n-fable"><b>Recours : Fable 5.1</b>, plus lent et ${fmtX(r.costs.Fable/r.costs.Opus)} fois plus cher. Seulement si Opus 5.5 ${r.recours==='agentique' ? 'ne tient pas la distance sur ce travail autonome' : 'ne suffit pas'}, même en effort max.</div>`;
 
@@ -908,7 +1067,7 @@ function render(r){
         <div class="sub">${ef.desc}${ef.api ? `<span class="api">Réglage : <b>${ef.api}</b></span>` : ''}</div>
       </div>
     </div>
-    ${noteOpus}
+    ${prepBlock}
     <div class="nature">
       <div class="nature-head">
         <span class="t">Nature de la tâche</span>
@@ -917,7 +1076,7 @@ function render(r){
       <div class="spectrum"><span class="mark" style="left:${nat.pct}%;color:${natColor}"></span></div>
       <div class="spectrum-lbls"><span class="l">Exécution cadrée</span><span class="r">Jugement / finesse</span></div>
       <div class="nature-rule">${nat.rule}</div>
-      <div class="nature-src">Cet axe reprend la règle que j'utilise pour décider quel modèle fait tourner mon propre assistant : le cadré se délègue à un modèle léger, le jugement se garde sur le plus capable. L'économie se joue là, dans l'arbitrage, pas dans le prix du modèle.</div>
+      <div class="nature-src">Cet axe reprend la règle que j'utilise pour décider quel modèle fait tourner mon propre assistant : le cadré se délègue à un modèle léger, le jugement se garde sur le plus capable. L'économie se joue là, dans l'arbitrage.</div>
     </div>
     <div class="why">
       <div class="rationale">${rationale}</div>
@@ -925,7 +1084,7 @@ function render(r){
         : `<div class="chips"><span class="chip">aucun signal fort, classé par structure</span></div>`}
       ${r.note ? `<div class="note">${r.note}</div>` : ''}
       ${noteFable}
-      <span class="score">famille — build ${r.fam.build} · analyse ${r.fam.analyze} · rédaction ${r.fam.write} · mécanique ${r.fam.mech} &nbsp;·&nbsp; effort ${r.es}</span>
+      <span class="score">scores : ${Object.entries(r.fam).filter(([,v]) => v > 0).map(([k,v]) => `${SCORELBL[k]} ${v}`).join(' · ') || 'aucun'} &nbsp;·&nbsp; effort ${r.es}</span>
     </div>
     <div class="cost">
       <div class="cost-head">
@@ -936,7 +1095,7 @@ function render(r){
         ${Object.keys(PRICE).map(costRow).join('')}
       </div>
       <div class="cost-foot">${foot}</div>
-      <div class="cost-disc">Estimation indicative pour 1&nbsp;000 requêtes d'une taille comparable à votre prompt. Tarifs : docs Anthropic, septembre 2026 (Haiku 4.5, Sonnet 5, Opus 5.5, Fable 5.1), hors mise en cache et remises sur volume. L'effort n'entre pas dans le calcul : plus il est haut, plus la réponse consomme.</div>
+      <div class="cost-disc">Estimation indicative pour 1&nbsp;000 requêtes d'une taille comparable à votre prompt. Tarifs : docs Anthropic, octobre 2026 (Haiku 4.5, Sonnet 5.5, Opus 5.5, Fable 5.1), hors mise en cache et remises sur volume. L'effort n'entre pas dans le calcul : plus il est haut, plus la réponse consomme.</div>
     </div>`;
 
   requestAnimationFrame(()=>{
@@ -996,6 +1155,7 @@ const GHOST=[
   'conçois une architecture multi-tenant sécurisée',
   'traduis ce mail en anglais',
   'compare ces deux stratégies et tranche',
+  'quelle mutuelle choisir pour ma famille',
 ];
 let typeTimer=null, ghostI=0;
 function startGhost(){
@@ -1055,6 +1215,7 @@ const EX=[
   'Fais un audit complet SEO, UX et UI de ce site et priorise les actions',
   'Conçois l\'architecture d\'une app multi-tenant sécurisée',
   'Compare en profondeur ces deux stratégies de contenu et tranche',
+  'Cherche les meilleures mutuelles selon mes besoins',
   'Agent autonome qui gère ma migration de bout en bout',
 ];
 const exWrap=document.getElementById('examples');
